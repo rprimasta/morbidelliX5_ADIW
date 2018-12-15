@@ -6,7 +6,7 @@ import time
 import linuxcnc, hal
 
 START_ADDR = 2048#M0
-S_CNT = 20
+S_CNT = 40
 B_CNT = 20
 plc01 = hal.component("plc01")
 #CNC <- PLC
@@ -28,8 +28,31 @@ plc01.newpin("S14", hal.HAL_BIT,hal.HAL_OUT) #DRILL-BANK-DOWN
 plc01.newpin("S15", hal.HAL_BIT,hal.HAL_OUT) #DRILL-BANK-UP
 plc01.newpin("S16", hal.HAL_BIT,hal.HAL_OUT) #TBL-AB-READY
 plc01.newpin("S17", hal.HAL_BIT,hal.HAL_OUT) #TBL-CD-READY
-plc01.newpin("S18", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S19", hal.HAL_BIT,hal.HAL_OUT) #
+plc01.newpin("S18", hal.HAL_BIT,hal.HAL_OUT) #MAG-OPENED
+plc01.newpin("S19", hal.HAL_BIT,hal.HAL_OUT) #MAG-SLIDE-ON-POS
+
+#STATUS BIT
+plc01.newpin("S20", hal.HAL_BIT,hal.HAL_IN) #MACHINE RST
+plc01.newpin("S21", hal.HAL_BIT,hal.HAL_IN) #MACHINE ON
+plc01.newpin("S22", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_ON
+plc01.newpin("S23", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_REV
+plc01.newpin("S24", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_RST
+plc01.newpin("S25", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S26", hal.HAL_BIT,hal.HAL_IN) #MAG-START
+plc01.newpin("S27", hal.HAL_BIT,hal.HAL_IN) #TOOL UNCLAMP
+plc01.newpin("S28", hal.HAL_BIT,hal.HAL_IN) #MAG Y-
+plc01.newpin("S29", hal.HAL_BIT,hal.HAL_IN) #MAG Y+
+plc01.newpin("S30", hal.HAL_BIT,hal.HAL_IN) #DRILL BANK DOWN
+plc01.newpin("S31", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE AB
+plc01.newpin("S32", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE CD
+plc01.newpin("S33", hal.HAL_BIT,hal.HAL_IN) #mag open
+plc01.newpin("S34", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S35", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S36", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S37", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S38", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S39", hal.HAL_BIT,hal.HAL_IN) #
+
 
 #CNC -> PLC
 plc01.newpin("B20", hal.HAL_BIT,hal.HAL_IN) #MACHINE RST
@@ -37,7 +60,7 @@ plc01.newpin("B21", hal.HAL_BIT,hal.HAL_IN) #MACHINE ON
 plc01.newpin("B22", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_ON
 plc01.newpin("B23", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_REV
 plc01.newpin("B24", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_RST
-plc01.newpin("B25", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_STOPED
+plc01.newpin("B25", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B26", hal.HAL_BIT,hal.HAL_IN) #MAG-START
 plc01.newpin("B27", hal.HAL_BIT,hal.HAL_IN) #TOOL UNCLAMP
 plc01.newpin("B28", hal.HAL_BIT,hal.HAL_IN) #MAG Y-
@@ -45,7 +68,7 @@ plc01.newpin("B29", hal.HAL_BIT,hal.HAL_IN) #MAG Y+
 plc01.newpin("B30", hal.HAL_BIT,hal.HAL_IN) #DRILL BANK DOWN
 plc01.newpin("B31", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE AB
 plc01.newpin("B32", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE CD
-plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #mag open
 plc01.newpin("B34", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B35", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B36", hal.HAL_BIT,hal.HAL_IN) #
@@ -56,10 +79,11 @@ plc01.newpin("B39", hal.HAL_BIT,hal.HAL_IN) #
 
 #DATA CNC->PLC
 plc01.newpin("D201", hal.HAL_U32,hal.HAL_IN) #MAG INDEX COM
+plc01.newpin("D201F", hal.HAL_FLOAT,hal.HAL_IN) #MAG INDEX COM
 
 #DATA PLC->CNC
-plc01.newpin("E200", hal.HAL_U32,hal.HAL_OUT) #MAG INDEX COM
-plc01.newpin("E201", hal.HAL_U32,hal.HAL_OUT) #MAG INDEX COM
+plc01.newpin("E200F", hal.HAL_FLOAT,hal.HAL_OUT) #MAG INDEX COM
+plc01.newpin("E201F", hal.HAL_FLOAT,hal.HAL_OUT) #MAG INDEX COM
 
 
 
@@ -76,20 +100,20 @@ try:
 	regs = client.read_holding_registers(4297, 1, unit=1)
 	plc01['D201'] = regs.registers[0]
 	while True:
-		result= client.read_discrete_inputs(START_ADDR,20,unit= 1)
-#		print(result.bits)
+		result= client.read_discrete_inputs(START_ADDR,S_CNT,unit= 1)
+		#print(result.bits)
 		for x in range(0, S_CNT):
 			plc01['S' + str(x)] = result.bits[x]
 		for x in range(0, B_CNT):
-			pinout[x] = plc01['B' + str(S_CNT + x)]
-		client.write_coils(START_ADDR+S_CNT,pinout,unit=1)
+			pinout[x] = plc01['B' + str((S_CNT/2) + x)]
+		client.write_coils(START_ADDR+(S_CNT/2),pinout,unit=1)
 
 		
 		regs = client.read_holding_registers(4296, 2, unit=1)
-		plc01['E200'] = regs.registers[0]
-		plc01['E201'] = regs.registers[1]
+		plc01['E200F'] = float(regs.registers[0])
+		plc01['E201F'] = float(regs.registers[1])
 
-		client.write_register(4297, plc01['D201'], unit=1)
+		client.write_register(4297, int(plc01['D201F']), unit=1)
 		#print(regs.registers)
 		time.sleep(0.025)
 		#time.sleep(1)

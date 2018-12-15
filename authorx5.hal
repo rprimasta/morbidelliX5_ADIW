@@ -162,3 +162,31 @@ net hard-lim-z axis.2.pos-lim-sw-in <= plc01.S8 => axis.2.neg-lim-sw-in
 net hard-lim-b axis.4.pos-lim-sw-in <= plc01.S9 => axis.4.neg-lim-sw-in
 net hard-lim-c axis.5.pos-lim-sw-in <= plc01.S10 => axis.5.neg-lim-sw-in
 
+
+# loop prepare signals when remapping T
+
+net tool-prep-loop iocontrol.0.tool-prepare iocontrol.0.tool-prepared
+#net halui.tool.number <= plc01.E200
+
+
+
+loadrt and2 count=4
+addf and2.0 base-thread
+addf and2.1 base-thread
+addf and2.2 base-thread
+addf and2.3 base-thread
+
+net -homed0 and2.0.in0 axis.0.homed #ok
+net -homed1 and2.0.in1 axis.1.homed #ok
+
+net -homed2 and2.1.in0 axis.2.homed
+net -homed3 and2.1.in1 axis.4.homed #ok
+
+net -h1 and2.2.in0 and2.0.out #ok
+net -h2 and2.2.in1 and2.1.out
+
+net -h3 and2.3.in0 and2.2.out
+net -h4 and2.3.in1 axis.5.homed
+
+
+net -homeall and2.3.out => halui.mdi-command-00

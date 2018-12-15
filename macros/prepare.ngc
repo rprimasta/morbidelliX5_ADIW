@@ -1,0 +1,115 @@
+o<prepare> sub
+
+;=========UNTUK SIMULASI
+M65 P7
+M65 P2
+
+#<tp_y> = -100.		;abs
+#<tp_z> = -100. 		;abs
+
+#<tp_y_ret> = 80. 	;jarak lepas y poc inc
+#<tp_z_ret> = 80. 	;jarak lepas z poc inc
+#<approch_fr> = 2500	; tool in speed
+
+;======tolak T0
+o100 if [#<tool> EQ 0]
+	(debug, tool #<tool> tidak dikenal)
+o102	return [0]
+o100 endif
+
+;======tolak T-code = current-T
+o103 if [#<tool> EQ #4999]
+	(debug, Tool Sama)
+o104	return [1]
+o103 endif
+
+;======get current slot
+M66 E1 L0
+#<curr_poc> = #5399
+
+;======matikan spindle
+M05
+M66 P2 L3 Q999
+
+
+;======cancel compensasi
+G40 
+G49
+
+;======cek curr-mag eq spindle
+o105 if [#4999 NE #<curr_poc>]
+;cari tool slot
+M68 E0 Q[#4999]
+o106 while [#5399 NE #4999]
+	M66 E0 L0
+	G04P0.1
+o106 endwhile
+
+;o108 while [#5399 NE #4999]
+;run mag
+M64 P0
+M66 P12 L3 Q50
+M66 P4 L1 Q50
+M65 P0
+M66 P12 L4 Q50
+;o108 endwhile
+
+o105 endif
+
+;======head pos
+G91G28Z0.
+G91G28B0.C0.
+G90G0G53Y[#<tp_y>]
+G90G0G53Z[#<tp_z>]
+
+;======open mag
+M64 P7
+M66 P10 L3 Q999
+
+;======mag outil
+M64 P2
+M66 P11 L1 Q999
+
+;======tool release
+;belum
+
+;======pull
+G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
+
+
+;======tool req search
+
+;cari tool slot
+M68 E0 Q[#<tool>]
+o107 while [#5399 NE #<tool>]
+	M66 E0 L0
+	G04P0.1
+o107 endwhile
+
+(debug, r_prepare tool=#<tool> pocket=#<pocket> current=#5399)
+;(debug, r_prepare tool=#<tool> pocket=#<pocket> current=#5399)
+M64 P0
+M66 P12 L3 Q50
+M66 P4 L1 Q10
+M65 P0
+M66 P12 L4 Q50
+
+;======pull
+G90G1G53Z[#<tp_z>] F[#<approch_fr>]
+
+;======tool LOCK
+;belum
+
+M65 P2
+M66 P11 L1 Q999
+G91G28Z0.
+
+
+; returning a positive value to commit:
+
+M65 P7
+#4999 = #<tool>
+
+
+o<prepare> endsub [1]
+m2

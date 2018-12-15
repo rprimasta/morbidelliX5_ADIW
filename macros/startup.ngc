@@ -1,0 +1,10 @@
+O<startup> sub
+O100 IF [#4999 EQ 0]
+
+M6 T0
+O100 ELSE
+M61 Q#4999
+O100 ENDIF
+ 
+O<startup> endsub [1]
+m2
