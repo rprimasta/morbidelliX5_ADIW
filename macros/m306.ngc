@@ -1,0 +1,10 @@
+o<m306>sub
+(cover up)
+(clear bit)
+M65P6
+G04P.5(wait)
+M64P6(Set bit)
+M66P0L2Q60(wait busy flag release)
+G04P.5(wait)
+M65P6
+o<m306>endsub

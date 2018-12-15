@@ -1,0 +1,8 @@
+o<m200>sub
+(TOOL CHANGE MACRO)
+
+
+(PRINT, Tool Number word=#<P>)
+S3 S5000
+
+o<m200>endsub

@@ -1,0 +1,6 @@
+o<m312>sub
+(aligner push on)
+(clear bit)
+M64P10
+G04P1.5(wait)
+o<m312>endsub

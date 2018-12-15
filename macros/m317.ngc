@@ -1,0 +1,6 @@
+o<m317>sub
+(GRIPPER OPEN)
+(clear bit)
+M65P12
+G04P1.5(wait)
+o<m317>endsub

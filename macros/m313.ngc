@@ -1,0 +1,6 @@
+o<m313>sub
+(aligner push off)
+(clear bit)
+M65P10
+G04P1.5(wait)
+o<m313>endsub

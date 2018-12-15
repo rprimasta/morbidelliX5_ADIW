@@ -1,0 +1,12 @@
+o<m299>sub
+(run saw 1)
+(clear bit)
+(debug, masuuuk)
+M65P15
+G04P.1
+M64P15(Set bit)
+M66P0L1Q1(wait busy flag rise)
+M66P0L4Q10(wait busy flag release)
+M65P15
+G04P.5(wait)
+o<m299>endsub

@@ -1,0 +1,6 @@
+o<m309>sub
+(aligner close)
+(clear bit)
+M65P8
+G04P1.5(wait)
+o<m309>endsub

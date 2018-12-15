@@ -1,0 +1,10 @@
+o<m304>sub
+(press up)
+(clear bit)
+M65P4
+G04P.5(wait)
+M64P4(Set bit)
+M66P0L2Q60(wait busy flag release)
+G04P.5(wait)
+M65P4
+o<m304>endsub

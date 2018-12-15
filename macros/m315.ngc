@@ -1,0 +1,6 @@
+o<m315>sub
+(UNLOCK)
+(clear bit)
+M65P11
+G04P1.5(wait)
+o<m315>endsub

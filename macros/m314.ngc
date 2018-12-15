@@ -1,0 +1,6 @@
+o<m314>sub
+(LOCK COVER)
+(clear bit)
+M64P11
+G04P1.5(wait)
+o<m314>endsub
