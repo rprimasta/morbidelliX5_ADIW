@@ -1,23 +1,5 @@
 o<m251>sub
-(CUT COMMAND)
-
-(P is required since it's uppercase in the argspec)
-(debug, P word=#<P>)
-(the q argspec is optional since its lowercase in the argspec. Use as follows:)
-o10 if [EXISTS[#<q>]]
-    (debug, Q word set: #<q>)
-o10 endif
-
-o105 repeat [#<Q>]
-G40 
-T1 M6
-G91 G0 X[#<P> - [#<D>/2.]] 
-G40
-o20 if [#<R> LT 1800.]
-	M300 (POTONG DEKAT)
-O20 else
-	M301 (POTONG JAUH)
-o20 endif
-o105 endrepeat
-
+(MAG DOOR CLOSE)
+M65 P7
 o<m251>endsub
+M2

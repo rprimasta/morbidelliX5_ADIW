@@ -1,0 +1,13 @@
+o<m248>sub
+(MAG PUSH)
+
+o11	if [#4998 EQ 0]
+		M64 P2
+		M66 P11 L1 Q999
+		#4998 = 1
+o11	else
+o12		return [0]
+o11	endif	
+
+o<m248>endsub
+M2

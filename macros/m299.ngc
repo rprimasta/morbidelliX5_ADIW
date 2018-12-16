@@ -1,12 +1,29 @@
 o<m299>sub
-(run saw 1)
-(clear bit)
-(debug, masuuuk)
-M65P15
-G04P.1
-M64P15(Set bit)
-M66P0L1Q1(wait busy flag rise)
-M66P0L4Q10(wait busy flag release)
-M65P15
-G04P.5(wait)
-o<m299>endsub
+(TOOL UNCLAMP)
+
+;======================ASSIGN ON TOOL UNCLAMP====================
+	#<on_flag> = 0
+	M64 P1
+o10	while [#<on_flag> EQ 0]
+		M66 P13 L3 Q1
+o11		if [#5399 EQ 1]
+			#<on_flag> = 1
+o11		else
+			M64 P1
+o11		endif
+o10	endwhile
+
+	
+	#<gretry> = 0
+o13	while [#<gretry> EQ 0]
+
+		M66 P5 L3 Q1
+o14		if [#5399 EQ 1]
+			#<gretry> = 1
+o14		endif
+
+o13	endwhile
+
+
+o<m299>endsub [0]
+m2

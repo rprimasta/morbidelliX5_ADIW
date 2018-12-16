@@ -26,6 +26,7 @@ net table-cd-ready 	motion.digital-in-09 <= plc01.S17
 net mag-opened 		motion.digital-in-10 <= plc01.S18
 net mag-slide-on-pos 	motion.digital-in-11 <= plc01.S19
 net mag-pos-start-stat	motion.digital-in-12 => plc01.S26
+net tool-unclamp-stat	motion.digital-in-13 => plc01.S27
 #data exchange
 net tool-req-number motion.analog-out-00 => plc01.D201F
 

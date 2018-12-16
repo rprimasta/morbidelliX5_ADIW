@@ -1,0 +1,6 @@
+o<m250>sub
+(MAG DOOR OPEN)
+M64 P7
+M66 P10 L3 Q999
+o<m250>endsub
+M2

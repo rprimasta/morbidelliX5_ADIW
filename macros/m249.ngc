@@ -1,0 +1,15 @@
+o<m249>sub
+(MAG PULL)
+
+o11	if [#4998 EQ 1]
+		M65 P2
+		M66 P11 L1 Q999
+		#4998 = 0
+o11	else
+o12		return [0]
+o11	endif	
+
+
+
+o<m249>endsub
+M2
