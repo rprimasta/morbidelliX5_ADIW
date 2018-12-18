@@ -94,29 +94,41 @@ print(B_CNT)
 pinout = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 register = [0,0,0,0,0,0,0,0]
 
-try:
-	time.sleep(2)
-	plc01.ready()
-	regs = client.read_holding_registers(4297, 1, unit=1)
-	plc01['D201'] = regs.registers[0]
-	while True:
-		result= client.read_discrete_inputs(START_ADDR,S_CNT,unit= 1)
-		#print(result.bits)
-		for x in range(0, S_CNT):
-			plc01['S' + str(x)] = result.bits[x]
-		for x in range(0, B_CNT):
-			pinout[x] = plc01['B' + str((S_CNT/2) + x)]
-		client.write_coils(START_ADDR+(S_CNT/2),pinout,unit=1)
+time.sleep(2)
+plc01.ready()
+regs = client.read_holding_registers(4297, 1, unit=1)
+plc01['D201'] = regs.registers[0]
 
+def syncPlc():
+	result= client.read_discrete_inputs(START_ADDR,S_CNT,unit= 1)
+	#print(result.bits)
+#	if hasattr(result, 'bits'):
+#		print ("connection err")
+#		return -1
+	for x in range(0, S_CNT):
+		plc01['S' + str(x)] = result.bits[x]
+	for x in range(0, B_CNT):
+		pinout[x] = plc01['B' + str((S_CNT/2) + x)]
+	client.write_coils(START_ADDR+(S_CNT/2),pinout,unit=1)
 		
-		regs = client.read_holding_registers(4296, 2, unit=1)
-		plc01['E200F'] = float(regs.registers[0])
-		plc01['E201F'] = float(regs.registers[1])
+	regs = client.read_holding_registers(4296, 2, unit=1)
+#	if hasattr(regs, 'registers'):
+#		print ("connection err")
+#		return -1
 
-		client.write_register(4297, int(plc01['D201F']), unit=1)
-		#print(regs.registers)
-		time.sleep(0.025)
-		#time.sleep(1)
+	plc01['E200F'] = float(regs.registers[0])
+	plc01['E201F'] = float(regs.registers[1])
 
-except KeyboardInterrupt:
-	client.close()
+	client.write_register(4297, int(plc01['D201F']), unit=1)
+	#print(int(plc01['E201F']))
+	
+	#time.sleep(1)
+	return 0
+
+if __name__ == "__main__":
+	while True:
+		try:
+			syncPlc()	
+		except KeyboardInterrupt:
+			print("Connection was closed")
+			client.close()

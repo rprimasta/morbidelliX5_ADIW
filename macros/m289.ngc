@@ -24,7 +24,7 @@ o12		else
 o12		endif
 o11	endwhile
 
-
+(debug, CHECK START MAG IS LOW : #5399) 
 ;======================ASSIGN T SLOT NUMBER====================
 	
 	#4000 = [#<P> - 1]
@@ -34,7 +34,9 @@ o13	while [#5399 NE #4000]
 		G04P0.1
 o13	endwhile
 
+(debug, CHECK MAG SET POINT : #5399)
 (debug, P word send to plc: #4000)
+G04 P0.5
 ;======================START SEARCH====================
 	#<on_flag> = 0
 	M64 P0
@@ -42,7 +44,6 @@ o14	while [#<on_flag> EQ 0]
 		M66 P12 L3 Q1
 o15		if [#5399 EQ 1]
 			#<on_flag> = 1
-			M65 P0
 o15		else
 			M64 P0
 o15		endif
@@ -50,11 +51,30 @@ o14	endwhile
 
 
 ;======================WAIT MAG ON POS====================
-M66 P4 L1 Q5
+
+#4001 = 1
+o20	while [#5399 NE #4000]
+		M66 E1 L0
+		G04P0.1
+		#4001 = [#4001+1] 
+		G04P0.2
+o20	endwhile
 
 o10 else
 	(debug, P word not set)
 o10 endif
+
+(debug, MAG MATCH !!)
+;===================CHECK START MAG IS LOW==================
+	#<off_flag> = 0
+o21	while [#<off_flag> EQ 0]
+		M66 P12 L4 Q1
+o22		if [#5399 EQ 0]
+			#<off_flag> = 1
+o22		else
+			M65 P0
+o22		endif
+o21	endwhile
 
 o<m289>endsub [1]
 m2

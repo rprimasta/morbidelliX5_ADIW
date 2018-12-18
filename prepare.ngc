@@ -1,6 +1,5 @@
-o<change> sub
-(debug, change: current_tool=#<current_tool>)
-(debug, change: selected_pocket=#<selected_pocket>)
+o<prepare> sub
+
 ;=========UNTUK SIMULASI
 ;M65 P7
 ;M65 P2
@@ -13,13 +12,13 @@ o<change> sub
 #<approch_fr> = 2500	; tool in speed
 
 ;======tolak T0
-o100 if [#<selected_pocket> EQ 0]
-	(debug, tool #<selected_pocket> tidak dikenal)
+o100 if [#<tool> EQ 0]
+	(debug, tool #<tool> tidak dikenal)
 o102	return [0]
 o100 endif
 
 ;======tolak T-code = current-T
-o103 if [#<selected_pocket> EQ #4999]
+o103 if [#<tool> EQ #4999]
 	(debug, Tool Sama)
 o104	return [1]
 o103 endif
@@ -63,7 +62,7 @@ G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
 
 
 ;======tool req search
-M289 P#<selected_pocket>
+M289 P#<tool>
 
 ;======take tool
 G90G1G53Z[#<tp_z>] F[#<approch_fr>]
@@ -79,9 +78,8 @@ G91G28Z0.
 ;======CLOSE MAG
 M251
 
-#4999 = #<selected_pocket>
+#4999 = #<tool>
 M61 Q#4999
 
-
-o<change> endsub [1]
+o<prepare> endsub [1]
 m2
