@@ -46,38 +46,38 @@ plc01.newpin("S17", hal.HAL_BIT,hal.HAL_OUT) #TBL-CD-READY
 plc01.newpin("S18", hal.HAL_BIT,hal.HAL_OUT) #MAG-OPENED
 plc01.newpin("S19", hal.HAL_BIT,hal.HAL_OUT) #MAG-SLIDE-ON-POS
 #STATUS OUTPUT
-plc01.newpin("S20", hal.HAL_BIT,hal.HAL_IN) #MACHINE RST
-plc01.newpin("S21", hal.HAL_BIT,hal.HAL_IN) #MACHINE ON
-plc01.newpin("S22", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_ON
-plc01.newpin("S23", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_REV
-plc01.newpin("S24", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_RST
-plc01.newpin("S25", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S26", hal.HAL_BIT,hal.HAL_IN) #MAG-START
-plc01.newpin("S27", hal.HAL_BIT,hal.HAL_IN) #TOOL UNCLAMP
-plc01.newpin("S28", hal.HAL_BIT,hal.HAL_IN) #MAG Y-
-plc01.newpin("S29", hal.HAL_BIT,hal.HAL_IN) #MAG Y+
-plc01.newpin("S30", hal.HAL_BIT,hal.HAL_IN) #DRILL BANK DOWN
-plc01.newpin("S31", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE AB
-plc01.newpin("S32", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE CD
-plc01.newpin("S33", hal.HAL_BIT,hal.HAL_IN) #mag open
-plc01.newpin("S34", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S35", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S36", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S37", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S38", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S39", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S20", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S21", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S22", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S23", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S24", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S25", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S26", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S27", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S28", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S29", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S30", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S31", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S32", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S33", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S34", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S35", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S36", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S37", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S38", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S39", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
 #STATUS INPUT
-plc01.newpin("S40", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S41", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S42", hal.HAL_BIT,hal.HAL_OUT) # 
-plc01.newpin("S43", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S44", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S45", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S46", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S47", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S48", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S49", hal.HAL_BIT,hal.HAL_OUT) #
-plc01.newpin("S50", hal.HAL_BIT,hal.HAL_OUT) #
+plc01.newpin("S40", hal.HAL_BIT,hal.HAL_OUT) #MPG SEL X
+plc01.newpin("S41", hal.HAL_BIT,hal.HAL_OUT) #MPG SEL Y
+plc01.newpin("S42", hal.HAL_BIT,hal.HAL_OUT) #MPG SEL Z 
+plc01.newpin("S43", hal.HAL_BIT,hal.HAL_OUT) #MPG SEL B
+plc01.newpin("S44", hal.HAL_BIT,hal.HAL_OUT) #MPG SEL C
+plc01.newpin("S45", hal.HAL_BIT,hal.HAL_OUT) #MPG X1
+plc01.newpin("S46", hal.HAL_BIT,hal.HAL_OUT) #MPG X10
+plc01.newpin("S47", hal.HAL_BIT,hal.HAL_OUT) #MPG X100
+plc01.newpin("S48", hal.HAL_BIT,hal.HAL_OUT) #DHOOD DOWN SENS POS
+plc01.newpin("S49", hal.HAL_BIT,hal.HAL_OUT) #DHOOD UP SENS POS
+plc01.newpin("S50", hal.HAL_BIT,hal.HAL_OUT) #TOOL DETECTION
 plc01.newpin("S51", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S52", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S53", hal.HAL_BIT,hal.HAL_OUT) #
@@ -88,26 +88,26 @@ plc01.newpin("S57", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S58", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S59", hal.HAL_BIT,hal.HAL_OUT) #
 #STATUS OUTPUT
-plc01.newpin("S60", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S61", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S62", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S63", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S64", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S65", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S66", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S67", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S68", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S69", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S70", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S71", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S72", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S73", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S74", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S75", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S76", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S77", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S78", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("S79", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("S60", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S61", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S62", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S63", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S64", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S65", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S66", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S67", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S68", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S69", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S70", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S71", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S72", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S73", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S74", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S75", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S76", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S77", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S78", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
+plc01.newpin("S79", hal.HAL_BIT,hal.HAL_IN) #REFER TO OUTPUT BIT
 
 
 #CNC -> PLC
@@ -124,8 +124,8 @@ plc01.newpin("B29", hal.HAL_BIT,hal.HAL_IN) #MAG Y+
 plc01.newpin("B30", hal.HAL_BIT,hal.HAL_IN) #DRILL BANK DOWN
 plc01.newpin("B31", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE AB
 plc01.newpin("B32", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE CD
-plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #mag open
-plc01.newpin("B34", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #MAG DOR OPEN
+plc01.newpin("B34", hal.HAL_BIT,hal.HAL_IN) #DUSTHOOD ARM UP DDOWN
 plc01.newpin("B35", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B36", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B37", hal.HAL_BIT,hal.HAL_IN) #
@@ -133,20 +133,20 @@ plc01.newpin("B38", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B39", hal.HAL_BIT,hal.HAL_IN) #
 
 #CNC -> PLC
-plc01.newpin("B60", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B61", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B62", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B63", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B64", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B65", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B66", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B67", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B68", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B69", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B70", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B71", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B72", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B73", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B60", hal.HAL_BIT,hal.HAL_IN) #T101
+plc01.newpin("B61", hal.HAL_BIT,hal.HAL_IN) #T102
+plc01.newpin("B62", hal.HAL_BIT,hal.HAL_IN) #T104
+plc01.newpin("B63", hal.HAL_BIT,hal.HAL_IN) #T105
+plc01.newpin("B64", hal.HAL_BIT,hal.HAL_IN) #T106
+plc01.newpin("B65", hal.HAL_BIT,hal.HAL_IN) #T107
+plc01.newpin("B66", hal.HAL_BIT,hal.HAL_IN) #T108
+plc01.newpin("B67", hal.HAL_BIT,hal.HAL_IN) #T109
+plc01.newpin("B68", hal.HAL_BIT,hal.HAL_IN) #T110
+plc01.newpin("B69", hal.HAL_BIT,hal.HAL_IN) #T111
+plc01.newpin("B70", hal.HAL_BIT,hal.HAL_IN) #T112
+plc01.newpin("B71", hal.HAL_BIT,hal.HAL_IN) #T5859
+plc01.newpin("B72", hal.HAL_BIT,hal.HAL_IN) #T6061
+plc01.newpin("B73", hal.HAL_BIT,hal.HAL_IN) #T6263
 plc01.newpin("B74", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B75", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B76", hal.HAL_BIT,hal.HAL_IN) #
