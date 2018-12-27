@@ -126,8 +126,8 @@ plc01.newpin("B31", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE AB
 plc01.newpin("B32", hal.HAL_BIT,hal.HAL_IN) #TABLE ENABLE CD
 plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #MAG DOR OPEN
 plc01.newpin("B34", hal.HAL_BIT,hal.HAL_IN) #DUSTHOOD ARM UP DDOWN
-plc01.newpin("B35", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B36", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B35", hal.HAL_BIT,hal.HAL_IN) #TABLE LOCK AB
+plc01.newpin("B36", hal.HAL_BIT,hal.HAL_IN) #TABLE LOCK CD
 plc01.newpin("B37", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B38", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B39", hal.HAL_BIT,hal.HAL_IN) #
@@ -147,10 +147,10 @@ plc01.newpin("B70", hal.HAL_BIT,hal.HAL_IN) #T112
 plc01.newpin("B71", hal.HAL_BIT,hal.HAL_IN) #T5859
 plc01.newpin("B72", hal.HAL_BIT,hal.HAL_IN) #T6061
 plc01.newpin("B73", hal.HAL_BIT,hal.HAL_IN) #T6263
-plc01.newpin("B74", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B75", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B76", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B77", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B74", hal.HAL_BIT,hal.HAL_IN) #PDL AB Y SETUP
+plc01.newpin("B75", hal.HAL_BIT,hal.HAL_IN) #PDL CD Y SETUP
+plc01.newpin("B76", hal.HAL_BIT,hal.HAL_IN) #BAR AB SETUP
+plc01.newpin("B77", hal.HAL_BIT,hal.HAL_IN) #BAR CD SETUP
 plc01.newpin("B78", hal.HAL_BIT,hal.HAL_IN) #
 plc01.newpin("B79", hal.HAL_BIT,hal.HAL_IN) #
 

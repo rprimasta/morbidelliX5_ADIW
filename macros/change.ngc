@@ -1,9 +1,5 @@
 o<change> sub
-(debug, change: current_tool=#<current_tool>)
-(debug, change: selected_pocket=#<selected_pocket>)
 ;=========UNTUK SIMULASI
-;M65 P7
-;M65 P2
 
 #<tp_y> = 58.337		;abs
 #<tp_z> = [-354.244] 		;abs
@@ -12,10 +8,13 @@ o<change> sub
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc
 #<approch_fr> = 2500	; tool in speed
 
+#<max-retry> = 3
+#<max-umbrella-slot> = 12 
+
 ;======tolak T0
 o100 if [#<selected_pocket> EQ 0]
 	(debug, tool #<selected_pocket> tidak dikenal)
-o102	return [0]
+o102	return [1]
 o100 endif
 
 ;======tolak T-code = current-T
@@ -24,64 +23,143 @@ o103 if [#<selected_pocket> EQ #4999]
 o104	return [1]
 o103 endif
 
-;======get current slot
-M66 E1 L0
-#<curr_poc> = #5399
+;======save current modals
+M70
+(================================Umbrella tool change============================)
 
-;======matikan spindle
-M05
+o120 if [#<selected_pocket> LT [#<max-umbrella-slot>+1]]
+	;======get current slot
+	M66 E1 L0
+	#<curr_poc> = #5399
+	
+	;======matikan spindle
+	M05
+	
+	;======PULL MAG
+	M249
+	
+	;======cancel comp
+	G40 
+	G49
+	
+	
+	
+	o125 if [#4997 EQ 0]
+	
+		(----------------------------put tool-------------------------)
+		
+		;======cek curr-mag eq spindle
+		o105 if [#4999 NE #<curr_poc>]
+			M289 P#4999
+		o105 endif
+		
+		;======head pos
+		G91G28Z0.
+		G91G28B0.C0.
+		G90G0G53Y[#<tp_y>]
+		G90G0G53Z[#<tp_z>]
+		
+		;======open mag
+		M250
+		
+		;======mag outil
+		M248
+		
+		;======tool release
+		M299
+		
+		;======tool retract
+		G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
 
-;======PULL MAG
-M249
+		;======tool req search
+		M289 P#<selected_pocket>
+		(-------------------------end put tool-------------------------)
+	o125 else 
+		(-------------------------get tool directly--------------------)
+		
+		;======open mag
+		M250
+		
+		G90G0G53Y[#<tp_y>]
+		
+		;======tool req search
+		M289 P#<selected_pocket>
+		
+		;======mag outil
+		M248
+		
+		G90G0G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
+		;======tool release
+		M299
+		(----------------------end get tool directly--------------------)
+	o125 endif
 
-;======cancel comp
-G40 
-G49
+	
+	
+	;======take tool
+	G90G1G53Z[#<tp_z>] F[#<approch_fr>]
+	
+	
+	#<is-pluged> = 0
+	#<try-count> = 1
+	o130	while [#<is-pluged> EQ 0]
+			;======tool LOCK
+			M300
+			;======wait a moment
+			G04P1.
+			;======check tool is pluged correcly
+			M301
+	o135		if [#<_value> EQ 0]
+				#4997 = 0
+				#<is-pluged> = 1
+	o135		else
+				M299
+				;======tool retract
+				G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
+	
+	o140			if [#<try-count> GT #<max-retry>]
+					#4997 = 1	;mag error flag
+					#<is-pluged> = 1; exit loop				
+	o140			endif
+				G04P1
+				;======take tool
+				G90G1G53Z[#<tp_z>] F[#<approch_fr>]
+				#<try-count> = [#<try-count> + 1]	
+	o135		endif
+	o130	endwhile
+	
+	
+	o150	if [#4997 EQ 0]
+			;======PULL MAG
+			M249
+			G91G28Z0.
+			;======CLOSE MAG
+			M251	
+			#4999 = #<selected_pocket>
+			M61 Q#4999
+			#4997 = 0
+	o150	else
+			;======tool LOCK
+			M300
+			G91G28Z0.
+			;======PULL MAG
+			M249
+			;======CLOSE MAG
+			M251
+			#4999 = 0
+			M61 Q#4999
+	o150	endif
+	
 
-;======cek curr-mag eq spindle
-o105 if [#4999 NE #<curr_poc>]
-	M289 P#4999
-o105 endif
-
-;======head pos
-G91G28Z0.
-G91G28B0.C0.
-G90G0G53Y[#<tp_y>]
-G90G0G53Z[#<tp_z>]
-
-;======open mag
-M250
-
-;======mag outil
-M248
-
-;======tool release
-M299
-
-;======tool retract
-G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
+o120 endif
+(================================end umbrella tool change===========================)
 
 
-;======tool req search
-M289 P#<selected_pocket>
-
-;======take tool
-G90G1G53Z[#<tp_z>] F[#<approch_fr>]
-
-;======tool LOCK
-M300
-G04P1.
-;======PULL MAG
-M249
-
-G91G28Z0.
-
-;======CLOSE MAG
-M251
-
-#4999 = #<selected_pocket>
-M61 Q#4999
 
 
+
+
+;======Restore modals
+M72
 o<change> endsub [1]
 m2
