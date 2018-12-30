@@ -11,155 +11,105 @@ o<change> sub
 #<max-retry> = 3
 #<max-umbrella-slot> = 12 
 
-;======tolak T0
-o100 if [#<selected_pocket> EQ 0]
-	(debug, tool #<selected_pocket> tidak dikenal)
-o102	return [1]
-o100 endif
 
-;======tolak T-code = current-T
-o103 if [#<selected_pocket> EQ #4999]
-	(debug, Tool Sama)
-o104	return [1]
-o103 endif
+;======cek apakah pernah gagal=========
+o10 if [#<_current_tool> EQ 9999]        
+        (abort, Tool change pernah gagal. PENTING ! : JALANKAN MDI : M600 UNTUK MENGULANGI PENGAMBILAN TOOL YANG GAGAL. PASTIKAN TIDAK ADA TOOL TERPASANG PADA SPINDLE)  
+        o15 return[0]
+o10 endif
 
-;======save current modals
-M70
-(================================Umbrella tool change============================)
+;======lewati proses jika tool yg diminta sama dengan yg dpakai=========
+o20 if [#<selected_pocket> NE #<_current_tool>]       
+        o30 if [#<selected_pocket> LT 13]
+                ;(msg,ganti tool spindle)
+                M70
+                G91G28Z0.                
+                
+                M05 (SPINDLE OF)
+                G40 (CANCEL DIA COMP)
+	        G49 (CANCEL TL COMP)
+                G92.2 (CANCEL OFFS COO)
+                G91G28B0. (STDY POSITION)
+                M249 (PULL MAG)
+                M334 (DHOODUP)
 
-o120 if [#<selected_pocket> LT [#<max-umbrella-slot>+1]]
-	;======get current slot
-	M66 E1 L0
-	#<curr_poc> = #5399
-	
-	;======matikan spindle
-	M05
-	
-	;======PULL MAG
-	M249
-	
-	;======cancel comp
-	G40 
-	G49
-	
-	
-	
-	o125 if [#4997 EQ 0]
-	
-		(----------------------------put tool-------------------------)
-		
-		;======cek curr-mag eq spindle
-		o105 if [#4999 NE #<curr_poc>]
-			M289 P#4999
-		o105 endif
-		
-		;======head pos
-		G91G28Z0.
-		G91G28B0.C0.
-		G90G0G53Y[#<tp_y>]
-		G90G0G53Z[#<tp_z>]
-		
-		;======open mag
-		M250
-		
-		;======mag outil
-		M248
-		
-		;======tool release
-		M299
-		
-		;======tool retract
-		G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
+                M66 P17 L3 Q5 (CHECK DHOOD UP POS)
+                o32 if [#5399 EQ -1]
+                        M335
+                        (abort, DHood tidak pada posisi yang benar, periksa sensor DHood up !) 
+                o32 endif
+               
+                M289 P#<tool_in_spindle> (POCKET POSITIONING BY TOOL ON SPINDLE)
+		G90G0G53Y[#<tp_y>] (HEAD Y AXIS POS)
+		G90G0G53Z[#<tp_z>] (HEAD Z AXIS POS)
+		M250 (OPEN MAG)
+		M248 (MAG PUSH)		
+		M299 (TOOL UNCLAMP)
+                G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>] (RETRACT)
+                M289 P#<selected_pocket> (POCKET POSITIONING BY SELECTED POCKET)
+                
+                
+                #<try-count> = 0
+                #<is-pluged> = 0
+	        o34 while [#<try-count> LT #<max-retry>]
+                                G90G1G53Z[#<tp_z>] F[#<approch_fr>] (TAKE TOOL)
+			        M300 (TOOL CLAMP)
+			        G04P1. (WAIT 1 SEC)
+			        M301 (CHECK TOOL PLUGED)
+	                        o36 if [#<_value> EQ 0]
+				        #<is-pluged> = 1 (PLUGED CORRECTLY FLAG)
+                                        #<try-count> = 3 (EXIT LOOP)
+	                        o36 else
+				        M299 (TOOL UNCLAMP)
+				        G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>] (RETRACT)
+	        		        G04P1. (WAIT 1 SEC)
+				        ;G90G1G53Z[#<tp_z>] F[#<approch_fr>] (TAKE TOOL)
+				        #<try-count> = [#<try-count> + 1]	
+	                        o36 endif
+	        o34 endwhile
 
-		;======tool req search
-		M289 P#<selected_pocket>
-		(-------------------------end put tool-------------------------)
-	o125 else 
-		(-------------------------get tool directly--------------------)
-		
-		;======open mag
-		M250
-		
-		G90G0G53Y[#<tp_y>]
-		
-		;======tool req search
-		M289 P#<selected_pocket>
-		
-		;======mag outil
-		M248
-		
-		G90G0G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
-		;======tool release
-		M299
-		(----------------------end get tool directly--------------------)
-	o125 endif
+                o150 if [#<is-pluged> EQ 1] (TOOL CHANGE SUCCESS)
+                                M61 Q#<selected_pocket>
+                                #4999 = #<selected_pocket>
+			        M249 (PULL MAG)
+			        G91G28Z0. (GO HOME)
+			        M251 (CLOSE MAG)
+                                M335 (DHOOD DOWN)
+			        #4997 = 0
+	        o150 else (TOOL CHANGE FAILED)
+                                G91G28Z0. (GO HOME)
+			        M300 (TOOL CLAMP)			        
+			        M249(PULL MAG)
+			        M251 (CLOSE MAG)
+                                M335 (DHOOD DOWN)
+			        #4997 = #<selected_pocket>
+			        #4999 = 9999
+			        M61 Q#4999
+			        (abort, Tool change gagal, tool tidak terdeteksi. pastikan tool terpasang dengan benar. PENTING ! : JALANKAN MDI : M600 UNTUK MENGULANGI PENGAMBILAN TOOL YANG GAGAL. PASTIKAN TIDAK ADA TOOL TERPASANG PADA SPINDLE)
+	        o150 endif
+                M72
+                
+                ;==================PROSES GANTI TOOL SPINDLE=================
+                o35 return[1]
+        o30 else
+                o40 if [#<selected_pocket> GT 20]
+                        o50 if [#<selected_pocket> LT 39]
+                                ;(msg,ganti tool drill)
+                                M70
+                                ;==================PROSES GANTI TOOL DRILL=================
+                                M72
+                                M61 Q#<selected_pocket>
+                                o55 return [1]
+                        o50 else
+                                o56 return [0]
+                        o50 endif
+                o40 else
+                        o45 return [0] 
+                o40 endif      
+        o30 endif      
+o20 endif
 
-	
-	
-	;======take tool
-	G90G1G53Z[#<tp_z>] F[#<approch_fr>]
-	
-	
-	#<is-pluged> = 0
-	#<try-count> = 1
-	o130	while [#<is-pluged> EQ 0]
-			;======tool LOCK
-			M300
-			;======wait a moment
-			G04P1.
-			;======check tool is pluged correcly
-			M301
-	o135		if [#<_value> EQ 0]
-				#4997 = 0
-				#<is-pluged> = 1
-	o135		else
-				M299
-				;======tool retract
-				G90G1G53Z[#<tp_z> + #<tp_z_ret>] F[#<approch_fr>]
-	
-	o140			if [#<try-count> GT #<max-retry>]
-					#4997 = 1	;mag error flag
-					#<is-pluged> = 1; exit loop				
-	o140			endif
-				G04P1
-				;======take tool
-				G90G1G53Z[#<tp_z>] F[#<approch_fr>]
-				#<try-count> = [#<try-count> + 1]	
-	o135		endif
-	o130	endwhile
-	
-	
-	o150	if [#4997 EQ 0]
-			;======PULL MAG
-			M249
-			G91G28Z0.
-			;======CLOSE MAG
-			M251	
-			#4999 = #<selected_pocket>
-			M61 Q#4999
-			#4997 = 0
-	o150	else
-			;======tool LOCK
-			M300
-			G91G28Z0.
-			;======PULL MAG
-			M249
-			;======CLOSE MAG
-			M251
-			#4999 = 0
-			M61 Q#4999
-	o150	endif
-	
-
-o120 endif
-(================================end umbrella tool change===========================)
-
-
-
-
-
-
-;======Restore modals
-M72
+(debug, Done)
+M61 Q#<selected_pocket>
 o<change> endsub [1]
 m2

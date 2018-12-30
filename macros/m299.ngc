@@ -1,29 +1,45 @@
 o<m299>sub
 (TOOL UNCLAMP)
-
+#<retry-count> = 3
+#31 = 0
+#<gretry> = 0
 ;======================ASSIGN ON TOOL UNCLAMP====================
-	#<on_flag> = 0
-	M64 P1
-o10	while [#<on_flag> EQ 0]
-		M66 P13 L3 Q1
-o11		if [#5399 EQ 1]
-			#<on_flag> = 1
-o11		else
-			M64 P1
-o11		endif
-o10	endwhile
-
 	
-	#<gretry> = 0
-o13	while [#<gretry> EQ 0]
 
-		M66 P5 L3 Q1
-o14		if [#5399 EQ 1]
-			#<gretry> = 1
-o14		endif
+o11	while [#<gretry> LT #<retry-count>]
+		M64 P1
+		M66 P13 L3 Q5
+o12		if [#5399 EQ -1]
+                        M699			
+                        (abort, ERROR: PLC TIDAK MERESPON)
+o12		endif
 
-o13	endwhile
+		M66 P5 L3 Q5
 
+o13		if [#5399 EQ -1]
+			#<gretry> = [#<gretry> + 1] 
+			M65 P1
+			M66 P13 L4 Q5
+			
+o14			if [#5399 EQ -1]
+                                M699
+				(abort, ERROR: PLC TIDAK MERESPON)
+o14			endif
+			#31 = 1
+			G04 P2.
+o13		else
+			#31 = 0
+			#<gretry> = 3
+			
+o13		endif
 
-o<m299>endsub [0]
+o11	endwhile
+	
+
+o15 if [#31 EQ 1]
+                M699
+		(abort, ERROR: GAGAL TOOL UNCLAMP)
+o15 endif
+
+o<m299>endsub 
 m2

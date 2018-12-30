@@ -78,7 +78,7 @@ plc01.newpin("S47", hal.HAL_BIT,hal.HAL_OUT) #MPG X100
 plc01.newpin("S48", hal.HAL_BIT,hal.HAL_OUT) #DHOOD DOWN SENS POS
 plc01.newpin("S49", hal.HAL_BIT,hal.HAL_OUT) #DHOOD UP SENS POS
 plc01.newpin("S50", hal.HAL_BIT,hal.HAL_OUT) #TOOL DETECTION
-plc01.newpin("S51", hal.HAL_BIT,hal.HAL_OUT) #
+plc01.newpin("S51", hal.HAL_BIT,hal.HAL_OUT) #DUSTHOOD UP DETECTION
 plc01.newpin("S52", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S53", hal.HAL_BIT,hal.HAL_OUT) #
 plc01.newpin("S54", hal.HAL_BIT,hal.HAL_OUT) #
@@ -116,7 +116,7 @@ plc01.newpin("B21", hal.HAL_BIT,hal.HAL_IN) #MACHINE ON
 plc01.newpin("B22", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_ON
 plc01.newpin("B23", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_REV
 plc01.newpin("B24", hal.HAL_BIT,hal.HAL_IN) #SPINDLE_RST
-plc01.newpin("B25", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B25", hal.HAL_BIT,hal.HAL_IN) #DRILL-ON
 plc01.newpin("B26", hal.HAL_BIT,hal.HAL_IN) #MAG-START
 plc01.newpin("B27", hal.HAL_BIT,hal.HAL_IN) #TOOL UNCLAMP
 plc01.newpin("B28", hal.HAL_BIT,hal.HAL_IN) #MAG Y-
@@ -128,9 +128,9 @@ plc01.newpin("B33", hal.HAL_BIT,hal.HAL_IN) #MAG DOR OPEN
 plc01.newpin("B34", hal.HAL_BIT,hal.HAL_IN) #DUSTHOOD ARM UP DDOWN
 plc01.newpin("B35", hal.HAL_BIT,hal.HAL_IN) #TABLE LOCK AB
 plc01.newpin("B36", hal.HAL_BIT,hal.HAL_IN) #TABLE LOCK CD
-plc01.newpin("B37", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B38", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B39", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B37", hal.HAL_BIT,hal.HAL_IN) #SON-Y
+plc01.newpin("B38", hal.HAL_BIT,hal.HAL_IN) #SON-Z
+plc01.newpin("B39", hal.HAL_BIT,hal.HAL_IN) #SON-B
 
 #CNC -> PLC
 plc01.newpin("B60", hal.HAL_BIT,hal.HAL_IN) #T101
@@ -151,8 +151,8 @@ plc01.newpin("B74", hal.HAL_BIT,hal.HAL_IN) #PDL AB Y SETUP
 plc01.newpin("B75", hal.HAL_BIT,hal.HAL_IN) #PDL CD Y SETUP
 plc01.newpin("B76", hal.HAL_BIT,hal.HAL_IN) #BAR AB SETUP
 plc01.newpin("B77", hal.HAL_BIT,hal.HAL_IN) #BAR CD SETUP
-plc01.newpin("B78", hal.HAL_BIT,hal.HAL_IN) #
-plc01.newpin("B79", hal.HAL_BIT,hal.HAL_IN) #
+plc01.newpin("B78", hal.HAL_BIT,hal.HAL_IN) #SON-C
+plc01.newpin("B79", hal.HAL_BIT,hal.HAL_IN) #SON-X
 
 
 #DATA CNC->PLC

@@ -1,10 +1,6 @@
 O<startup> sub
-O100 IF [#4999 EQ 0]
-M61 Q0
-O100 ELSE
 M61 Q#4999
-#4998 = 0
-O100 ENDIF
- 
+M289 P#4999
+M699
 O<startup> endsub [1]
 m2

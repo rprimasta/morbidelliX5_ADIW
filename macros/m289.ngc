@@ -57,7 +57,7 @@ o20	while [#5399 NE #4000]
 o20	endwhile
 
 o10 else
-	(debug, P word not set)
+	(abort, gunakan argumen Pn, n : nomor slot)
 o10 endif
 
 ;===================CHECK START MAG IS LOW==================

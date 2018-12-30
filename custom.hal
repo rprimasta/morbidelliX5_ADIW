@@ -1,6 +1,10 @@
 # Include your customized HAL commands here
 # This file will not be overwritten when you run stepconf again
 
+
+
+
+
 #group cnc => plc
 net mag-pos-start motion.digital-out-00 => plc01.B26
 net tool-unclamp motion.digital-out-01 => plc01.B27
@@ -11,6 +15,8 @@ net mag-open motion.digital-out-07 => plc01.B33
 net dhood motion.digital-out-08 => plc01.B34
 
 #DRILL
+net DRILL-ON motion.digital-out-09 => plc01.B25
+
 net drill_t101 motion.digital-out-10 => plc01.B60
 net drill_t102 motion.digital-out-11 => plc01.B61
 net drill_t103 motion.digital-out-12 => plc01.B62
@@ -66,6 +72,7 @@ net dhood-down-pos	motion.digital-in-14 <= plc01.S48
 net dhood-up-pos	motion.digital-in-15 <= plc01.S49
 
 net tool-detect	motion.digital-in-16 <= plc01.S50
+net dhood-up-detect	motion.digital-in-17 <= plc01.S51
 
 #data exchange
 net tool-req-number motion.analog-out-00 => plc01.D201F
@@ -76,15 +83,15 @@ net curr-pocket-number motion.analog-in-01 <= plc01.E200F
 #=======================MPG Config==========================
 # Jog Pendant
 # Jog Pendant
-loadrt encoder num_chan=1
-loadrt mux4 count=1
-addf encoder.capture-position servo-thread
-addf encoder.update-counters base-thread
-addf mux4.0 servo-thread
+#loadrt encoder num_chan=1
+#loadrt mux4 count=1
+#addf encoder.capture-position servo-thread
+#addf encoder.update-counters base-thread
+#addf mux4.0 servo-thread
 
 # If your MPG outputs a quadrature signal per click set x4 to 1
 # If your MPG puts out 1 pulse per click set x4 to 0
-setp encoder.0.x4-mode 0
+#setp encoder.0.x4-mode 0
 
 # For velocity mode, set to 1
 # In velocity mode the axis stops when the dial is stopped
@@ -92,36 +99,36 @@ setp encoder.0.x4-mode 0
 # For position mode (the default), set to 0
 # In position mode the axis will move exactly jog-scale
 # units for each count, regardless of how long that might take,
-setp axis.0.jog-vel-mode 0
-setp axis.1.jog-vel-mode 0
-setp axis.2.jog-vel-mode 0
+#setp axis.0.jog-vel-mode 0
+#setp axis.1.jog-vel-mode 0
+#setp axis.2.jog-vel-mode 0
 
 # This sets the scale that will be used based on the input to the mux4
-setp mux4.0.in0 0.1
-setp mux4.0.in1 0.01
-setp mux4.0.in2 0.001
+#setp mux4.0.in0 0.1
+#setp mux4.0.in1 0.01
+#setp mux4.0.in2 0.001
 
 # The inputs to the mux4 component
-net scale1 mux4.0.sel0 <= plc01.S45
-net scale2 mux4.0.sel1 <= plc01.S46
+#net scale1 mux4.0.sel0 <= plc01.S45
+#net scale2 mux4.0.sel1 <= plc01.S46
 
 # The output from the mux4 is sent to each axis jog scale
-net mpg-scale <= mux4.0.out
-net mpg-scale => axis.0.jog-scale
-net mpg-scale => axis.1.jog-scale
-net mpg-scale => axis.2.jog-scale
+#net mpg-scale <= mux4.0.out
+#net mpg-scale => axis.0.jog-scale
+#net mpg-scale => axis.1.jog-scale
+#net mpg-scale => axis.2.jog-scale
 
 # The MPG inputs
-net mpg-a encoder.0.phase-A <= parport.1.pin-10-in
-net mpg-b encoder.0.phase-B <= parport.1.pin-11-in
+#net mpg-a encoder.0.phase-A <= parport.1.pin-10-in
+#net mpg-b encoder.0.phase-B <= parport.1.pin-11-in
 
 # The Axis select inputs
-net mpg-x axis.0.jog-enable <= plc01.S40
-net mpg-y axis.1.jog-enable <= plc01.S41
-net mpg-z axis.2.jog-enable <= plc01.S42
+#net mpg-x axis.0.jog-enable <= plc01.S40
+#net mpg-y axis.1.jog-enable <= plc01.S41
+#net mpg-z axis.2.jog-enable <= plc01.S42
 
 # The encoder output counts to the axis. Only the selected axis will move.
-net encoder-counts  <= encoder.0.counts
-net encoder-counts => axis.0.jog-counts
-net encoder-counts => axis.1.jog-counts
-net encoder-counts => axis.2.jog-counts
+#net encoder-counts  <= encoder.0.counts
+#net encoder-counts => axis.0.jog-counts
+#net encoder-counts => axis.1.jog-counts
+#net encoder-counts => axis.2.jog-counts

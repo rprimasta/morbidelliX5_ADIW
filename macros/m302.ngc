@@ -1,10 +1,12 @@
 o<m302>sub
-(saw up)
-(clear bit)
-M65P2
-G04P.5(wait)
-M64P2(Set bit)
-M66P0L2Q60(wait busy flag release)
-G04P.5(wait)
-M65P2
+(TOOL UNPLUG CHECKING)
+
+		M66 P16 L4 Q4
+o11		if [#5399 EQ 0]
+o13			return [0] ; HAS NO TOOL
+o11		else
+o14			return [1] ; HAS A TOOL
+o11		endif
+		
 o<m302>endsub
+m2
