@@ -80,6 +80,23 @@ net tool-req-stat-number motion.analog-in-00 <= plc01.E201F
 net curr-pocket-number motion.analog-in-01 <= plc01.E200F
 
 
+#DHOOD PROTECTION
+#loadrt mux2 count=2
+#addf mux2.0 servo-thread
+#addf mux2.1 servo-thread
+
+#setp mux2.0.in0 [AXIS_5]MAX_LIMIT_C
+#setp mux2.0.in1 [AXIS_5]DHOOD_RET
+
+#setp mux2.1.in0 [AXIS_5]MIN_LIMIT_C
+#setp mux2.1.in1 [AXIS_5]DHOOD_RET
+
+#net dhood-c-limit mux2.1.sel <= motion.digital-out-29 => mux2.0.sel
+
+#net c-max-limit mux2.0.out => [AXIS_5]MAX_LIMIT
+#net c-min-limit mux2.1.out => [AXIS_5]MIM_LIMIT
+
+
 #=======================MPG Config==========================
 # Jog Pendant
 # Jog Pendant

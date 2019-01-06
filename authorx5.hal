@@ -3,19 +3,19 @@
 # overwritten when you run stepconf again
 loadrt trivkins
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[TRAJ]AXES num_dio=64
-loadrt hal_parport cfg="0 out 1 out"
+loadrt hal_parport cfg="0 out"
 setp parport.0.reset-time 2500
 loadrt stepgen step_type=0,0,0,0,0,0
 loadrt pwmgen output_type=1
 loadusr -W /home/author/linuxcnc/configs/authorx5/plc01.py
 
 addf parport.0.read base-thread
-addf parport.1.read base-thread
+#addf parport.1.read base-thread
 addf stepgen.make-pulses base-thread
 addf pwmgen.make-pulses base-thread
 addf parport.0.write base-thread
 addf parport.0.reset base-thread
-addf parport.1.write base-thread
+#addf parport.1.write base-thread
 
 addf stepgen.capture-position servo-thread
 addf motion-command-handler servo-thread
@@ -27,7 +27,7 @@ net spindle-cmd-rpm => pwmgen.0.value
 #net spindle-on <= motion.spindle-on => pwmgen.0.enable
 net spindle-pwm <= pwmgen.0.pwm
 setp pwmgen.0.pwm-freq 100.0
-setp pwmgen.0.scale 1166.66666667
+setp pwmgen.0.scale 25500.
 setp pwmgen.0.offset 0.114285714286
 setp pwmgen.0.dither-pwm true
 net spindle-cmd-rpm     <= motion.spindle-speed-out
@@ -181,7 +181,7 @@ net tool-prep-loop iocontrol.0.tool-prepare iocontrol.0.tool-prepared
 #net halui.tool.number <= plc01.E200
 
 
-
+#HOMING STATUS
 loadrt and2 count=4
 addf and2.0 base-thread
 addf and2.1 base-thread
@@ -202,3 +202,6 @@ net -h4 and2.3.in1 axis.5.homed
 
 
 net -homeall and2.3.out => halui.mdi-command-00
+
+
+
