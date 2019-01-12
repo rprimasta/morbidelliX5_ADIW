@@ -9,8 +9,8 @@ o20 if [#5400 NE 9999]
         (abort, Tool on Spindle Error, it should be Tool 9999)
 o20 endif
 
-#<tp_y> = 62.337		;abs
-#<tp_z> = [-354.244-2.] 		;abs
+#<tp_y> = 59.537 	;abs
+#<tp_z> = -353.628 ;abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc
@@ -37,8 +37,9 @@ o30 if [#5399 EQ -1]
 o30 endif
 
 
-G90G0G53Y[#<tp_y>] (HEAD Y AXIS POS)
-
+;G90G0G53Y[#<tp_y>] (HEAD Y AXIS POS)
+G90G0G53Y0.  (HEAD Y AXIS POS)
+G90G1G53Y[#<tp_y>] F[#<approch_fr>] (HEAD Y AXIS POS)
 G90G0G53Z[#<tp_z> + #<tp_z_ret>]
 M299 (TOOL UNCLAMP)
 #<try-count> = 0

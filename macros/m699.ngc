@@ -34,6 +34,8 @@ M65 P30
 M65 P31
 M65 P32
 
+M65 P60 (reset abort double table)
+
 #4998 = 0
 
 o<m699>endsub

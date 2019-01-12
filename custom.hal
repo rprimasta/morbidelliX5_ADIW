@@ -4,6 +4,7 @@
 
 
 
+net prog-run halui.program.run <= plc01.cstart
 
 #group cnc => plc
 net mag-pos-start motion.digital-out-00 => plc01.B26
@@ -33,12 +34,15 @@ net drill_t589 motion.digital-out-22 => plc01.B72
 net drill_t601 motion.digital-out-23 => plc01.B73
 net drill_t623 motion.digital-out-24 => plc01.B74
 
-#TABLE
-net tbl-ab-enable motion.digital-out-25 => plc01.B31
-net tbl-cd-enable motion.digital-out-26 => plc01.B32
-net tbl-ab-lock motion.digital-out-27 => plc01.B35
-net tbl-cd-lock motion.digital-out-28 => plc01.B36
 
+#TABLE
+#net tbl-ab-enable motion.digital-out-25 => plc01.B31
+#net tbl-cd-enable motion.digital-out-26 => plc01.B32
+#net tbl-ab-lock motion.digital-out-27 => plc01.B35
+#net tbl-cd-lock motion.digital-out-28 => plc01.B36
+
+
+net mag_home motion.digital-out-29 => plc01.B82
 
 
 #group cnc <= plc
@@ -59,8 +63,8 @@ net spindle-unlocked 	motion.digital-in-05 <= plc01.S13
 net drill-bank-down-pos	motion.digital-in-06 <= plc01.S14
 net drill-bank-up-pos 	motion.digital-in-07 <= plc01.S15
 
-net table-ab-ready 	motion.digital-in-08 <= plc01.S16
-net table-cd-ready 	motion.digital-in-09 <= plc01.S17
+#net table-ab-ready 	motion.digital-in-08 <= plc01.S16
+#net table-cd-ready 	motion.digital-in-09 <= plc01.S17
 
 net mag-opened 		motion.digital-in-10 <= plc01.S18
 net mag-slide-on-pos 	motion.digital-in-11 <= plc01.S19
@@ -74,6 +78,7 @@ net dhood-up-pos	motion.digital-in-15 <= plc01.S49
 net tool-detect	motion.digital-in-16 <= plc01.S50
 net dhood-up-detect	motion.digital-in-17 <= plc01.S51
 
+net mag_index_pos	motion.digital-in-18 <= plc01.S56
 #data exchange
 net tool-req-number motion.analog-out-00 => plc01.D201F
 net tool-req-stat-number motion.analog-in-00 <= plc01.E201F

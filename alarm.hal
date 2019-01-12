@@ -1,0 +1,16 @@
+# Include your ALARM HAL commands here
+# The commands in this file are run after the AXIS GUI (including PyVCP panel) starts
+
+
+loadrt message names=oillow,airpressure,invertergagal,emergency,servogagal messages="Slideway oil low,No Air pressure,Spindle inverter fault,Emergency,Servo Gagal"
+addf oillow servo-thread
+addf airpressure servo-thread
+addf invertergagal servo-thread
+addf emergency servo-thread
+addf servogagal servo-thread
+
+
+setp emergency.edge 0
+setp servogagal.edge 0
+setp invertergagal.edge 0
+net emergency_alarm invertergagal.trigger <= servogagal.trigger <= plc01.E01 => emergency.trigger  

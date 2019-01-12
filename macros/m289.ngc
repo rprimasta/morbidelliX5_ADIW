@@ -71,5 +71,11 @@ o22		else
 o22		endif
 o21	endwhile
 
+
+M66 P18 L3 Q5
+o30 if [#5399 EQ -1]
+	(abort, Posisi mag index meleset)
+o30 endif
+
 o<m289>endsub [1]
 m2

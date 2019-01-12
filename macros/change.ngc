@@ -1,8 +1,8 @@
 o<change> sub
 ;=========UNTUK SIMULASI
 
-#<tp_y> = 62.337		;abs
-#<tp_z> = [-354.244-2.] 		;abs
+#<tp_y> = 59.537	;abs
+#<tp_z> = -353.628 ;abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc
@@ -10,6 +10,12 @@ o<change> sub
 
 #<max-retry> = 3
 #<max-umbrella-slot> = 12 
+
+
+o5 if [#<_current_tool> EQ 0]        
+        (abort,  BELUM HOME)  
+        o15 return[0]
+o5 endif
 
 
 ;======cek apakah pernah gagal=========
@@ -40,7 +46,8 @@ o20 if [#<selected_pocket> NE #<_current_tool>]
                 o32 endif
                
                 M289 P#<tool_in_spindle> (POCKET POSITIONING BY TOOL ON SPINDLE)
-		G90G0G53Y[#<tp_y>] (HEAD Y AXIS POS)
+		;G90G0G53Y0.  (HEAD Y AXIS POS)
+                G90G1G53Y[#<tp_y>] F15000. (HEAD Y AXIS POS)
 		G90G0G53Z[#<tp_z>] (HEAD Z AXIS POS)
 		M250 (OPEN MAG)
 		M248 (MAG PUSH)		
@@ -109,7 +116,7 @@ o20 if [#<selected_pocket> NE #<_current_tool>]
         o30 endif      
 o20 endif
 
-(debug, Done)
+
 M61 Q#<selected_pocket>
 o<change> endsub [1]
 m2
