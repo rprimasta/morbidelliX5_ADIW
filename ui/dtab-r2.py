@@ -13,7 +13,7 @@ def get_handlers(halcomp,builder,useropts):
 
 class multiTable:
 	Filename = "brokerProg.json"
-	lastRun = False
+	lastRun = False	
 
 	#DATUM T1
 	datum_x1 = 247.331
@@ -31,6 +31,15 @@ class multiTable:
 	offs_x2 = 0.0
 	offs_y2 = 0.0
 	offs_z2 = 0.0
+
+	TAB_AB = 0
+	TAB_CD = 1
+
+	cstart_ab = False
+	cstart_cd = False
+
+	exec_ab = False
+	exec_cd = False
 
 	ab_active_st = False
 	cd_active_st = False
@@ -142,6 +151,7 @@ class multiTable:
 		print ("status cd")
 		print(self.cd_state)
 		return True
+
 	def is_exist(self,data=[],val=0):
 	        exist = False
         	for x in data:
@@ -149,113 +159,129 @@ class multiTable:
                         	print ("data sudah ada")
                         	exist = True
         	return exist
-
+	def buttonABon(self):
+		return self.halcomp['hal_start_a'] or self.halcomp['hal_start_b']
+	def buttonCDon(self):
+		return self.halcomp['hal_start_c'] or self.halcomp['hal_start_d']
+	def tabABready(self):
+		return self.halcomp['hal_tbl_ab_active'] and self.halcomp['hal_led_vp_ab']
+	def tabCDready(self):
+		return self.halcomp['hal_tbl_cd_active'] and self.halcomp['hal_led_vp_cd']
 	def periodic_check(self):
-		#check abort signal
-		self.s.poll()
 
-		if  self.halcomp['abort_signal'] == True and self.halcomp['machine-on'] == True:
-			self.ab_state = 0
-			self.cd_state = 0
-			del self.queue[:]
-			self.halcomp['hal_led_run_ab'] = False
-			self.halcomp['hal_led_run_cd'] = False
+		self.s.poll()
+		#check abort signal
+		if  self.halcomp['abort_signal'] and self.halcomp['machine-on']:
+			slef.exec_ab = False
+			self.cstart_ab = False
+			slef.exec_cd = False
+			self.cstart_cd = False
 			self.c.mode(linuxcnc.MODE_MDI)
                         self.c.wait_complete()
                         self.c.set_digital_output(60,0)
                         self.c.wait_complete()
 			print("pembatalan berhasil")
 
-		self.s.poll()
-                if self.s.paused == True:
-			if self.ab_state == 2:
-				if self.halcomp['hal_start_a'] == True or self.halcomp['hal_start_b'] == True:
-					self.c.auto(linuxcnc.AUTO_RESUME)
-					print("ditekan resume")
-			if self.cd_state == 2:
-				if self.halcomp['hal_start_c'] == True or self.halcomp['hal_start_d'] == True:
-					self.c.auto(linuxcnc.AUTO_RESUME)
-					print("ditekan resume")
-		
-		if self.halcomp['prog-is-idle'] == True and self.program_is_run()==False and self.ab_state == 2:
-			self.halcomp['hal_led_run_ab'] = False
-			print("program AB berakhir")
-			self.ab_state = 0
-			self.queue.remove(self.currProg)
-
-		if self.halcomp['prog-is-idle'] == True and self.program_is_run()==False and self.cd_state == 2:
-			self.halcomp['hal_led_run_cd'] = False
-			print("program CD berakhir")
-			self.cd_state = 0
-			self.queue.remove(self.currProg)
-
-		#CHECK START BTN 
-		if self.halcomp['hal_tbl_ab_active'] is True:
-			if self.halcomp['hal_led_vp_ab'] is True and self.ab_state == 0:
-				if self.halcomp['hal_start_a'] == True or self.halcomp['hal_start_b'] == True:
-					data = [0,self.builder.get_object("filechooserbutton1").get_filename()]
-					if self.is_exist(self.queue,0):
-						print("Program sudah jalan")
-					else:	
-						print("Jalankan Program AB")
-						self.queue.append(data)
-						self.halcomp['hal_led_run_ab'] = True
-						self.ab_state = 1
-						print(self.queue)
-
-
-		if self.halcomp['hal_tbl_cd_active'] is True:
-			if self.halcomp['hal_led_vp_cd'] is True and self.cd_state == 0:
-				if self.halcomp['hal_start_c'] == True or self.halcomp['hal_start_d'] == True:
-					data = [1,self.builder.get_object("filechooserbutton2").get_filename()]
-					if self.is_exist(self.queue,1):
-						print("Program sudah jalan")
-					else:	
-						print("Jalankan Program CD")
-						self.queue.append(data)
-						self.halcomp['hal_led_run_cd'] = True
-						self.cd_state = 1
-						print(self.cd_state)
-						print(self.queue)
-
-		#print (self.currProg)
-		if len(self.queue) > 0 and self.halcomp['prog-is-idle'] == True and self.ab_state == 1 and self.halcomp['abort_signal'] == False:
-			Prog = self.queue[-1]
-			self.cycleStart(Prog[0],Prog[1])
-			self.currProg = Prog
-			self.ab_state = 2
-			#self.queue.remove(Prog)
-			print("Program AB di eksekusi")
-
-		
-		if len(self.queue) > 0 and self.halcomp['prog-is-idle'] == True and self.cd_state == 1  and self.halcomp['abort_signal'] == False:
-			Prog = self.queue[-1]
-			self.cycleStart(Prog[0],Prog[1])
-			self.currProg = Prog
-			self.cd_state = 2
-			#self.queue.remove(Prog)
-			print("Program CD di eksekusi")
-
-		#LOCK TABLE WHEN RUN
-		if self.program_is_run():
-			if self.currProg == 0:
-				self.halcomp['hal_tbl_ab_lock'] = True
-				self.builder.get_object("togglebutton1").set_sensitive(False)
-			else: 
+		#UNLOCK VACUUM WHEN STOPED/PAUSED
+		if self.s.interp_state == linuxcnc.INTERP_IDLE: 
+			if not self.exec_ab:
 				self.halcomp['hal_tbl_ab_lock'] = False
-				self.builder.get_object("togglebutton1").set_sensitive(True)
-			if self.currProg == 1:
-				self.halcomp['hal_tbl_cd_lock'] = True
-				self.builder.get_object("togglebutton2").set_sensitive(False)
-			else:
+			if not self.exec_cd:
 				self.halcomp['hal_tbl_cd_lock'] = False
-				self.builder.get_object("togglebutton2").set_sensitive(True)				
+		elif self.s.interp_state == linuxcnc.INTERP_PAUSED:
+			if self.exec_ab:
+				self.halcomp['hal_tbl_ab_lock'] = False
+			if self.exec_cd:
+				self.halcomp['hal_tbl_cd_lock'] = False
 		else:
-			self.halcomp['hal_tbl_ab_lock'] = False
-			self.halcomp['hal_tbl_cd_lock'] = False
-			self.builder.get_object("togglebutton1").set_sensitive(True)
-			self.builder.get_object("togglebutton2").set_sensitive(True)
+			if self.exec_ab:
+				self.halcomp['hal_tbl_ab_lock'] = True
+			if self.exec_cd:
+				self.halcomp['hal_tbl_cd_lock'] = True
 		
+		#active/deactive activate button
+		if self.exec_ab:
+			self.builder.get_object("togglebutton1").set_sensitive(False)
+			self.halcomp['hal_led_run_ab'] = True
+		else:
+			self.builder.get_object("togglebutton1").set_sensitive(True)
+			self.halcomp['hal_led_run_ab'] = False
+		if self.exec_cd:
+			self.builder.get_object("togglebutton2").set_sensitive(False)
+			self.halcomp['hal_led_run_cd'] = True
+		else:
+			self.builder.get_object("togglebutton2").set_sensitive(True)
+			self.halcomp['hal_led_run_cd'] = False
+		
+		if self.s.interp_state == linuxcnc.INTERP_IDLE: 
+			if self.exec_ab:
+				self.cstart_ab = False
+				self.exec_ab = False
+				self.halcomp['hal_led_rdy_ab'] = False
+				print("dtab.py:Program AB Selesai")
+				#check other table queue
+				if self.cstart_cd:
+					self.exec_cd=True
+					self.cstart_cd=True
+					self.cycleStart(self.TAB_CD,self.cd_filename)
+					self.halcomp['hal_led_rdy_cd'] = True
+					print("dtab.py:Program Antri CD Dieksekusi")
+			elif self.exec_cd:
+				self.cstart_cd = False
+				self.exec_cd = False
+				self.halcomp['hal_led_rdy_cd'] = False
+				print("dtab.py:Program CD Selesai")
+				#check other table queue
+				if self.cstart_ab:
+					self.exec_ab=True
+					self.cstart_ab=True
+					self.cycleStart(self.TAB_AB,self.ab_filename)
+					self.halcomp['hal_led_rdy_ab'] = True
+					print("dtab.py:Program Antri AB Dieksekusi")
+			if not self.exec_ab and not self.exec_cd:
+				if self.buttonABon() and self.tabABready():
+					self.exec_ab=True
+					self.cstart_ab=True
+					self.cycleStart(self.TAB_AB,self.ab_filename)				
+					self.halcomp['hal_led_rdy_ab'] = True
+					print("dtab.py:Program AB Dieksekusi")
+				elif self.buttonCDon() and self.tabCDready():
+					self.exec_cd=True
+					self.cstart_cd=True
+					self.cycleStart(self.TAB_CD,self.cd_filename)
+					self.halcomp['hal_led_rdy_cd'] = True
+					print("dtab.py:Program CD Dieksekusi")
+		elif self.s.interp_state == linuxcnc.INTERP_PAUSED:
+			if self.exec_ab:
+				if self.buttonABon() and self.tabABready():
+					self.c.auto(linuxcnc.AUTO_RESUME)
+					print("dtab.py:Program AB Dilanjutkan")
+				if self.buttonCDon() and self.tabCDready():
+					print("dtab.py:Program CD Selanjutnya")
+					self.halcomp['hal_led_rdy_cd'] = True
+					self.cstart_cd=True
+
+			if self.exec_cd:					
+				if self.buttonCDon() and self.tabCDready():
+					self.c.auto(linuxcnc.AUTO_RESUME)
+					print("dtab.py:Program CD Dilanjutkan")
+				if self.buttonABon() and self.tabABready():
+					self.cstart_ab=True
+					self.halcomp['hal_led_rdy_ab'] = True
+					print("dtab.py:Program AB Selanjutnya")
+		else:
+			if self.exec_cd:
+				if self.buttonABon() and self.tabABready():
+					self.cstart_ab=True
+					self.halcomp['hal_led_rdy_ab'] = True
+					print("dtab.py:Program AB Selanjutnya")
+			if self.exec_ab:
+				if self.buttonCDon() and self.tabCDready():
+					self.cstart_cd=True
+					self.halcomp['hal_led_rdy_cd'] = True
+					print("dtab.py:Program CD Selanjutnya")
+			
+
 		return True
 				
 	def loadMultiProg(self):	
