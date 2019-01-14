@@ -172,9 +172,9 @@ class multiTable:
 		self.s.poll()
 		#check abort signal
 		if  self.halcomp['abort_signal'] and self.halcomp['machine-on']:
-			slef.exec_ab = False
+			self.exec_ab = False
 			self.cstart_ab = False
-			slef.exec_cd = False
+			self.exec_cd = False
 			self.cstart_cd = False
 			self.c.mode(linuxcnc.MODE_MDI)
                         self.c.wait_complete()
@@ -191,13 +191,21 @@ class multiTable:
 		elif self.s.interp_state == linuxcnc.INTERP_PAUSED:
 			if self.exec_ab:
 				self.halcomp['hal_tbl_ab_lock'] = False
+			else:
+				self.halcomp['hal_tbl_ab_lock'] = False
 			if self.exec_cd:
+				self.halcomp['hal_tbl_cd_lock'] = False
+			else:
 				self.halcomp['hal_tbl_cd_lock'] = False
 		else:
 			if self.exec_ab:
 				self.halcomp['hal_tbl_ab_lock'] = True
+			else:
+				self.halcomp['hal_tbl_ab_lock'] = False
 			if self.exec_cd:
 				self.halcomp['hal_tbl_cd_lock'] = True
+			else:
+				self.halcomp['hal_tbl_cd_lock'] = False
 		
 		#active/deactive activate button
 		if self.exec_ab:
