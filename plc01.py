@@ -8,26 +8,6 @@ import json
 
 
 
-#BROKER PROGRAM PATH MULTI TABLE
-brokerProg = "brokerProg.json"
-
-#COM CONF
-COM_PORT = "/dev/ttyS0"
-COM_METHOD= "ascii"
-COM_BAUD = 9600
-COM_STOPBITS = 1
-COM_BSIZE = 7
-COM_PARITY = 'E'
-UNIT_ADDR = 1
-
-#MEMORY MAPPING
-START_ADDR = 2048#M0
-S_CNT = 70
-B1_OFFS = 20
-B1_CNT = 20
-B2_OFFS = 60
-B2_CNT = 23
-
 plc01 = hal.component("plc01")
 #CNC <- PLC
 #STATUS INPUT
@@ -176,16 +156,26 @@ plc01.newpin("cstart", hal.HAL_BIT,hal.HAL_OUT) #CYCLE START
 plc01.newpin("program-is-run", hal.HAL_BIT,hal.HAL_IN) #PROGRAM RUN FLAGS
 
 #alarmCode
-plc01.newpin("E01", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E02", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E03", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E04", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E05", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E06", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E07", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E08", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E09", hal.HAL_BIT,hal.HAL_OUT)
-plc01.newpin("E010", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL0", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL1", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL2", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL3", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL4", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL5", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL6", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL7", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL8", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("AL9", hal.HAL_BIT,hal.HAL_OUT)
+plc01.newpin("EM0", hal.HAL_BIT,hal.HAL_OUT)
+
+#COM CONF
+COM_PORT = "/dev/ttyS0"
+COM_METHOD= "ascii"
+COM_BAUD = 9600
+COM_STOPBITS = 1
+COM_BSIZE = 7
+COM_PARITY = 'E'
+UNIT_ADDR = 1
 
 client= ModbusClient(method = COM_METHOD, port=COM_PORT, stopbits = COM_STOPBITS, bytesize = COM_BSIZE, parity = COM_PARITY, baudrate= COM_BAUD)
 connection = client.connect()
@@ -195,132 +185,39 @@ plc01.ready()
 regs = client.read_holding_registers(4297, 1, unit=1)
 plc01['D201'] = regs.registers[0]
 
-class table:
-
-	#DATUM T1
-	datum_x1 = 533.917
-	datum_y1 = -790.665
-
-	#DATUM T2
-	datum_x2 = 533.917 + 2350.
-	datum_y2 = -790.665
-
-	def __init__(self):	
-		self.ab_state = 0
-		self.cd_state = 0
-		self.s = linuxcnc.stat()
-		self.c = linuxcnc.command()
-		self.queue = [] #means no job at all
-		self.currJob = 0
-		self.lastRun = False
-	def jsonReader(self,filename=brokerProg):
-		data = None
-		with open(filename,"r") as f_read:
-			data = json.load(f_read)
-			
-		if data is None:
-			return None
-	
-		return data
-	
-	def prepare_ab(self):
-		if (plc01['S16'] is True) and (self.ab_state is 0):
-			if((plc01['S52'] is True) or (plc01['S53'] is True)):
-				param = self.jsonReader()
-				self.queue.append(['t1',param['table_1_info']['filename']])
-				self.ab_state = 1		 
-	
-	def prepare_cd(self):
-		if (plc01['S17'] is True) and (self.cd_state is 0):
-			if((plc01['S54'] is True) or (plc01['S55'] is True)):
-				param = self.jsonReader()
-				self.queue.append(['t2',param['table_2_info']['filename']])
-				self.cd_state = 1		 
-		
-	def double_table(self, runFlag):
-		#SCAN TABLE 1
-		if (plc01['B31'] is True):
-			self.prepare_ab()
-		#SCAN TABLE 2	
-		if (plc01['B32'] is True):
-			self.prepare_cd()
-		
-
-		if len(self.queue) != 0 and runFlag is False and self.currJob == 0:
-			prog = self.queue[0]
-			print("load Program :")
-			print(prog[1])
-			print("Table :")
-			print(prog[0])
-
-			self.c.program_open(prog[1])
-			self.c.reset_interpreter()
-			
-			if prog[0] == "t1":
-				mdi_str = "G10 L2 P1 X" + str(self.datum_x1) + " Y" + str(self.datum_y1)
-				print(mdi_str)
-				self.c.mdi(mdi_str)
-				self.c.wait_complete()
-				self.c.program_open(prog[1])
-				self.c.reset_interpreter()
-				self.c.mode(linuxcnc.MODE_AUTO)
-				self.c.wait_complete()
-				self.c.auto(linuxcnc.AUTO_RUN,0)
-				self.ab_state=2
-				self.currJob=1
-			if prog[0] == "t2":
-				mdi_str = "G10 L2 P1 X" + str(self.datum_x2) + " Y" + str(self.datum_y2)
-				print(mdi_str)
-				self.c.mdi(mdi_str)
-				self.c.mode(linuxcnc.MODE_AUTO)
-				self.c.program_open(prog[1])
-				self.c.reset_interpreter()
-				self.c.auto(linuxcnc.AUTO_RUN,0)
-				self.cd_state=2 
-				self.currJob=2				
-			self.queue.remove(prog)
-			return True,self.currJob 
-
-		if self.lastRun is True and runFlag is False:
-			if self.ab_state==2 and self.currJob==1:
-				self.ab_state=0
-				self.currJob==0
-			if self.cd_state==2 and self.currJob==2:
-				self.ab_state=0
-				self.currJob==0
-
-		self.lastRun = runFlag
-		return False,self.currJob 
-		
-							
-
-
 def syncPlc():
+
+	#MEMORY MAPPING
+	START_ADDR = 2048#M0
+	S_CNT = 70
+	B1_OFFS = 20
+	B1_CNT = 20
+	B2_OFFS = 60
+	B2_CNT = 23
+
+	AL_ADDR = 2304
+	AL_COUNT = 5
+
+	#=========================READ ALARM===============================
+	result= client.read_discrete_inputs(AL_ADDR,AL_COUNT,unit= UNIT_ADDR)
+	for x in range(0, AL_COUNT):
+		plc01['AL' + str(x)] = result.bits[x]
+	#print result.bits
 	#=========================READ BIT===============================
 	result= client.read_discrete_inputs(START_ADDR,S_CNT,unit= UNIT_ADDR)
-	#print(result.bits)
-#	if hasattr(result, 'bits'):
-#		print ("connection err")
-#		return -1
 	for x in range(0, S_CNT):
-		plc01['S' + str(x)] = result.bits[x]
-	
+		plc01['S' + str(x)] = result.bits[x]	
 	#=========================WRITE BIT===============================
 	pinout = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	for x in range(0, B1_CNT):
-		pinout[x] = plc01['B' + str(B1_OFFS + x)]
+		pinout[x] = (plc01['B' + str(B1_OFFS + x)])
 	client.write_coils(START_ADDR + B1_OFFS,pinout,unit=UNIT_ADDR)
 	pinout = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 	for x in range(0, B2_CNT):
-		pinout[x] = plc01['B' + str(B2_OFFS + x)]
+		pinout[x] = (plc01['B' + str(B2_OFFS + x)])
 	client.write_coils(START_ADDR + B2_OFFS,pinout,unit=UNIT_ADDR)
-	
 	#====================READ HOLDING REGS================
 	regs = client.read_holding_registers(4296, 2, unit=UNIT_ADDR)
-#	if hasattr(regs, 'registers'):
-#		print ("connection err")
-#		return -1
-
 	plc01['E200F'] = float(regs.registers[0])
 	plc01['E201F'] = float(regs.registers[1])
 	#====================WRITE HOLDING REGS===============
@@ -328,16 +225,15 @@ def syncPlc():
 	return 0
 
 def alarm_event():
-	plc01['E01'] = plc01['S1']
+	plc01['EM0'] = plc01['S1']
 
 if __name__ == "__main__":
-	tb = table()
-	while True:
-		try:
+	try:
+		while True:
 			syncPlc()
 			alarm_event()
 			#cstart,curr_table = tb.double_table(plc01['program-is-run'])	
 						
-		except KeyboardInterrupt:
-			print("Connection was closed")
-			client.close()
+	except KeyboardInterrupt:
+		print("Connection was closed")
+		client.close()

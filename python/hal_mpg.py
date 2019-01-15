@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import time
 import usb
 import hal
@@ -28,7 +29,7 @@ class mpg:
 		self.cfg = self.dev.get_active_configuration()
 		self.intf = self.cfg[(0,0)]
 		self.endpoint = self.intf[0]		
-		print self.endpoint.bEndpointAddress
+		#print self.endpoint.bEndpointAddress
 		self.wheel_count = 0
 	def poll(self):
 		try:
@@ -96,6 +97,7 @@ class mpg:
 		crc = data[7]
 		
 		if header == 0x04:
+			#print axis
 			#axis rotary switch
 			if axis == 17:
 				self.halcomp["select-x"] = True			
@@ -104,35 +106,35 @@ class mpg:
 				self.halcomp["select-a"] = False		
 				self.halcomp["select-b"] = False		
 				self.halcomp["select-c"] = False		
-			if axis == 18:
+			elif axis == 18:
 				self.halcomp["select-x"] = False			
 				self.halcomp["select-y"] = True			
 				self.halcomp["select-z"] = False		
 				self.halcomp["select-a"] = False		
 				self.halcomp["select-b"] = False		
 				self.halcomp["select-c"] = False		
-			if axis == 19:
+			elif axis == 19:
 				self.halcomp["select-x"] = False			
 				self.halcomp["select-y"] = False			
 				self.halcomp["select-z"] = True		
 				self.halcomp["select-a"] = False		
 				self.halcomp["select-b"] = False		
 				self.halcomp["select-c"] = False		
-			if axis == 20:
+			elif axis == 20:
 				self.halcomp["select-x"] = False			
 				self.halcomp["select-y"] = False			
 				self.halcomp["select-z"] = False		
 				self.halcomp["select-a"] = True		
 				self.halcomp["select-b"] = False		
 				self.halcomp["select-c"] = False		
-			if axis == 21:
+			elif axis == 21:
 				self.halcomp["select-x"] = False			
 				self.halcomp["select-y"] = False			
 				self.halcomp["select-z"] = False		
 				self.halcomp["select-a"] = False		
 				self.halcomp["select-b"] = True		
 				self.halcomp["select-c"] = False		
-			if axis == 22:
+			elif axis == 22:
 				self.halcomp["select-x"] = False			
 				self.halcomp["select-y"] = False			
 				self.halcomp["select-z"] = False		
@@ -285,7 +287,7 @@ class mpg:
 if __name__=="__main__":
 	buffer  = []*32		
 	mpg = mpg()
-	print mpg.connected
+	#print mpg.connected
 	try:
 		while True:
 			if not mpg.poll():

@@ -1,6 +1,6 @@
 #dtab hal here
-net prog-is-running halui.program.is-running => dtab.prog-is-run
-net prog-is-idle halui.program.is-idle => dtab.prog-is-idle
+#net prog-is-running  <= halui.program.is-running => dtab.prog-is-run
+#net prog-is-idle halui.program.is-idle => dtab.prog-is-idle
 net table-ab-ready dtab.hal_led_vp_ab <= plc01.S16
 net table-cd-ready dtab.hal_led_vp_cd <= plc01.S17
 
