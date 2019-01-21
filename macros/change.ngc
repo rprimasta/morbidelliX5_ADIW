@@ -1,8 +1,8 @@
 o<change> sub
 ;=========UNTUK SIMULASI
 
-#<tp_y> = 59.537	;abs
-#<tp_z> = -353.628 ;abs-354.244-2.
+#<tp_y> = 60.937 ;59.537	abs
+#<tp_z> = -363.628 ;-353.628abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc

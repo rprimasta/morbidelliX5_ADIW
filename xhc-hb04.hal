@@ -24,7 +24,8 @@ net jog-c axis.5.jog-enable <= hal_mpg.select-c
 
 net jog-scale hal_mpg.jog-scale => axis.0.jog-scale axis.1.jog-scale axis.2.jog-scale axis.4.jog-scale axis.5.jog-scale
 net jog-counts hal_mpg.wheel-count => axis.0.jog-counts axis.1.jog-counts axis.2.jog-counts axis.4.jog-counts axis.5.jog-counts
-net jog-speed halui.jog-speed <= halui.max-velocity.value
+setp halui.jog-speed 50
+#net jog-speed  halui.jog-speed <= halui.max-velocity.value
 
 # Wheel for feedrate and spindle
 #setp halui.feed-override.scale 0.01

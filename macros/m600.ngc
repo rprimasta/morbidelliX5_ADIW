@@ -9,8 +9,8 @@ o20 if [#5400 NE 9999]
         (abort, Tool on Spindle Error, it should be Tool 9999)
 o20 endif
 
-#<tp_y> = 59.537 	;abs
-#<tp_z> = -353.628 ;abs-354.244-2.
+#<tp_y> = 60.937 	;abs
+#<tp_z> = -363.628 ;abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc
