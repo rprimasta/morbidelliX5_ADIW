@@ -16,13 +16,13 @@ class multiTable:
 	lastRun = False	
 
 	#DATUM T1
-	datum_x1 = 247.331
-	datum_y1 = -112.662
-	datum_z1 = -304.637
+	datum_x1 = 247.971 #247.331
+	datum_y1 = -115.14 #-112.662
+	datum_z1 = -322.8000
 	#DATUM T2
-	datum_x2 = 2580.05
-	datum_y2 = -112.662
-	datum_z2 = -304.637
+	datum_x2 = 2593.511 #2580.05
+	datum_y2 = -115.14
+	datum_z2 = -322.8000
 	#DATUM o1
 	offs_x1 = 0.0
 	offs_y1 = 0.0
@@ -112,6 +112,10 @@ class multiTable:
 	def cycleStart(self,table=0,gcode_path=""):
 		
 		if table == 0:
+			self.offs_x1 = self.builder.get_object("exOffsABx").get_value()
+			self.offs_y1 = self.builder.get_object("exOffsABy").get_value()
+			self.offs_z1 = self.builder.get_object("exOffsABz").get_value()
+
 			x1 = self.datum_x1 + self.offs_x1
 			y1 = self.datum_y1 + self.offs_y1
 			z1 = self.datum_z1 + self.offs_z1
@@ -125,6 +129,9 @@ class multiTable:
 			self.c.mdi("M335")
 			self.c.wait_complete()
 		if table == 1:
+			self.offs_x2 = self.builder.get_object("exOffsCDx").get_value()
+			self.offs_y2 = self.builder.get_object("exOffsCDy").get_value()
+			self.offs_z2 = self.builder.get_object("exOffsCDz").get_value()
 			x2 = self.datum_x2 + self.offs_x2
 			y2 = self.datum_y2 + self.offs_y2
 			z2 = self.datum_z2 + self.offs_z2
@@ -358,9 +365,9 @@ class multiTable:
 
 	def btn_active_ab_state(self,gtkobj,data=None):
 		self.builder.get_object("button1").set_sensitive(self.ab_active_st)
-		self.builder.get_object("exOffsABx").set_sensitive(self.ab_active_st)
-		self.builder.get_object("exOffsABy").set_sensitive(self.ab_active_st)
-		self.builder.get_object("exOffsABz").set_sensitive(self.ab_active_st)
+		#self.builder.get_object("exOffsABx").set_sensitive(self.ab_active_st)
+		#self.builder.get_object("exOffsABy").set_sensitive(self.ab_active_st)
+		#self.builder.get_object("exOffsABz").set_sensitive(self.ab_active_st)
 		gcode_path = self.builder.get_object("filechooserbutton1").set_sensitive(self.ab_active_st)
 		self.ab_active_st = not self.ab_active_st
 		#c.set_digital_output(29, self.ab_active_st)
@@ -373,9 +380,9 @@ class multiTable:
 			self.ab_state = 0			
 	def btn_active_cd_state(self,gtkobj,data=None):
 		self.builder.get_object("button2").set_sensitive(self.cd_active_st)
-		self.builder.get_object("exOffsCDx").set_sensitive(self.cd_active_st)
-		self.builder.get_object("exOffsCDy").set_sensitive(self.cd_active_st)
-		self.builder.get_object("exOffsCDz").set_sensitive(self.cd_active_st)
+		#self.builder.get_object("exOffsCDx").set_sensitive(self.cd_active_st)
+		#self.builder.get_object("exOffsCDy").set_sensitive(self.cd_active_st)
+		#self.builder.get_object("exOffsCDz").set_sensitive(self.cd_active_st)
 		gcode_path = self.builder.get_object("filechooserbutton2").set_sensitive(self.cd_active_st)
                 self.cd_active_st = not self.cd_active_st
 		#c.set_digital_output(30, self.cd_active_st)

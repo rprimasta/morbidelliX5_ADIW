@@ -2,6 +2,17 @@
 # Home button
 net home halui.home-all <= hal_mpg.button-home
 
+net safe-z hal_mpg.button-safe-z => halui.mdi-command-03
+net parking-right hal_mpg.button-step => halui.mdi-command-01
+net parking-left hal_mpg.button-continuous => halui.mdi-command-02
+
+net feed-ov-inc hal_mpg.button-feed-inc => halui.feed-override.increase
+net feed-ov-dec hal_mpg.button-feed-dec => halui.feed-override.decrease
+net spindle-ov-inc hal_mpg.button-spindle-inc => halui.spindle-override.increase
+net spindle-ov-dec hal_mpg.button-spindle-dec => halui.spindle-override.decrease
+
+net tclamp hal_mpg.button-probe-z => halui.mdi-command-04
+net tuclamp hal_mpg.button-macro10 => halui.mdi-command-05
 # Absolute position LCD
 #net pos-x halui.axis.0.pos-feedback => xhc-hb04.x.pos-absolute
 #net pos-y halui.axis.1.pos-feedback => xhc-hb04.y.pos-absolute

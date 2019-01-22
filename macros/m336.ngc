@@ -1,0 +1,8 @@
+o<m336>sub
+(PARKIR JAUH)
+
+G91G28Z0.
+G90G53G0X4000.
+
+o<m336>endsub
+m2

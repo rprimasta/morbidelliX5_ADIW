@@ -1,0 +1,8 @@
+o<m337>sub
+(PARKIR DEKAT)
+
+G91G28Z0.
+G90G53G0X100.
+
+o<m337>endsub
+m2

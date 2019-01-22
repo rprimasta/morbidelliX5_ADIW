@@ -229,7 +229,10 @@ class mpg:
 				self.halcomp["button-step"] = True
 			else :
 				self.halcomp["button-step"] = False
-
+			if button1 == 16:
+				self.halcomp["button-macro10"] = True
+			else :
+				self.halcomp["button-macro10"] = False
 			if button1 == 12:
 				if button2 == 4:
 					self.halcomp["button-macro1"] = True
