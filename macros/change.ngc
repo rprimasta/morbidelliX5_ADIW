@@ -1,7 +1,7 @@
 o<change> sub
 ;=========UNTUK SIMULASI
 
-#<tp_y> = 60.937 ;59.537	abs
+#<tp_y> = 53.437 ;59.537	abs
 #<tp_z> = -363.628 ;-353.628abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
@@ -41,7 +41,7 @@ o20 if [#<selected_pocket> NE #<_current_tool>]
 
                 M66 P17 L3 Q5 (CHECK DHOOD UP POS)
                 o32 if [#5399 EQ -1]
-                        M335
+                        ;M335
                         (abort, DHood tidak pada posisi yang benar, periksa sensor DHood up !) 
                 o32 endif
                

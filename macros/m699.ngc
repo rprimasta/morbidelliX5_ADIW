@@ -1,4 +1,5 @@
 o<m699>sub
+G40G49
 (reset machine macro)
 M65 P0
 M65 P1

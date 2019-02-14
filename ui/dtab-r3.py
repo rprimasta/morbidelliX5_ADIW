@@ -125,6 +125,7 @@ class multiTable:
 #			self.c.mdi("M699") #reset
 #			self.c.wait_complete()
 			self.c.mdi(mdi_str)
+			self.c.mdi("G40G49")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
 			self.c.wait_complete()
@@ -141,6 +142,7 @@ class multiTable:
 #			self.c.mdi("M699") #reset
 #			self.c.wait_complete()
 			self.c.mdi(mdi_str)
+			self.c.mdi("G40G49")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
 			self.c.wait_complete()
@@ -375,7 +377,7 @@ class multiTable:
 		if(self.ab_active_st is True):
 			gcode_path = self.builder.get_object("filechooserbutton1").get_filename()
 			self.ab_filename = gcode_path
-			self.loadMultiProg()
+			#self.loadMultiProg()
 		else:
 			self.ab_state = 0			
 	def btn_active_cd_state(self,gtkobj,data=None):
@@ -390,7 +392,7 @@ class multiTable:
 		if(self.cd_active_st is True):
 			gcode_path = self.builder.get_object("filechooserbutton2").get_filename()
 			self.cd_filename = gcode_path
-			self.loadMultiProg()
+			#self.loadMultiProg()
 		else:
 			self.cd_state = 0			
 

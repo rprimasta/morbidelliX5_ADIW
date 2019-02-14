@@ -76,7 +76,7 @@ net dhood-down-pos	motion.digital-in-14 <= plc01.S48
 net dhood-up-pos	motion.digital-in-15 <= plc01.S49
 
 net tool-detect	motion.digital-in-16 <= plc01.S50
-net dhood-up-detect	motion.digital-in-17 <= plc01.S51
+#net dhood-up-detect	motion.digital-in-17 <= plc01.S51 => emc01.dhoodup
 
 net mag_index_pos	motion.digital-in-18 <= plc01.S56
 #data exchange

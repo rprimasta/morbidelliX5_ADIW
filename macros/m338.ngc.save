@@ -1,10 +1,13 @@
-o<m337>sub
-(PARKIR DEKAT)
+o<m338>sub
+(SAFE Z)
+
 o11	if [#4998 EQ 1]
                 (abort, ERROR : POSISI MAG MASIH DALAM POSISI MAJU. JALANKAN MDI : M249.)
 o11	else 
-	G91G28Z0.
-	G90G53G0X100.
-o11	endif
-o<m337>endsub
-m2
+		Z40
+		G40
+		G90G53G0Z0.
+o11	endif	
+
+o<m338>endsub
+M2

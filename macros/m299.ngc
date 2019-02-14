@@ -37,6 +37,7 @@ o11	endwhile
 	
 
 o15 if [#31 EQ 1]
+		M249
                 M699
 		(abort, ERROR: GAGAL TOOL UNCLAMP)
 o15 endif
