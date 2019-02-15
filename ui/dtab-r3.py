@@ -115,7 +115,11 @@ class multiTable:
 			self.offs_x1 = self.builder.get_object("exOffsABx").get_value()
 			self.offs_y1 = self.builder.get_object("exOffsABy").get_value()
 			self.offs_z1 = self.builder.get_object("exOffsABz").get_value()
-
+			print ("=================Offsets Table AB==============")
+			print ("OffsX = " + str(self.offs_x1))
+			print ("OffsY = " + str(self.offs_y1))
+			print ("OffsZ = " + str(self.offs_z1))
+			print ("===============================================")
 			x1 = self.datum_x1 + self.offs_x1
 			y1 = self.datum_y1 + self.offs_y1
 			z1 = self.datum_z1 + self.offs_z1
@@ -128,11 +132,17 @@ class multiTable:
 			self.c.mdi("G40G49")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
+			self.c.mdi("G54")
 			self.c.wait_complete()
 		if table == 1:
 			self.offs_x2 = self.builder.get_object("exOffsCDx").get_value()
 			self.offs_y2 = self.builder.get_object("exOffsCDy").get_value()
 			self.offs_z2 = self.builder.get_object("exOffsCDz").get_value()
+			print ("=================Offsets Table CD==============")
+			print ("OffsX = " + str(self.offs_x2))
+			print ("OffsY = " + str(self.offs_y2))
+			print ("OffsZ = " + str(self.offs_z2))
+			print ("===============================================")
 			x2 = self.datum_x2 + self.offs_x2
 			y2 = self.datum_y2 + self.offs_y2
 			z2 = self.datum_z2 + self.offs_z2
@@ -145,6 +155,7 @@ class multiTable:
 			self.c.mdi("G40G49")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
+			self.c.mdi("G54")
 			self.c.wait_complete()
 
 		self.builder.get_object("vcp_action_open1").load_file(gcode_path)
