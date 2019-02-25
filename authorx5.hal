@@ -70,8 +70,8 @@ setp parport.0.pin-17-out-invert 0
 net cdir            => parport.0.pin-17-out
 
 
-net home-x          <= parport.0.pin-10-in-not
-net home-y          <= parport.0.pin-11-in-not
+net home-x          <= parport.0.pin-10-in
+net home-y          <= parport.0.pin-11-in
 net home-z          <= parport.0.pin-12-in-not
 net home-b          <= parport.0.pin-13-in-not
 net home-c          <= parport.0.pin-15-in-not

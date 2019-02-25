@@ -20,7 +20,7 @@ class multiTable:
 	datum_y1 = -115.14 #-112.662
 	datum_z1 = -322.8000
 	#DATUM T2
-	datum_x2 = 2593.511 #2580.05
+	datum_x2 = 2589.251 #2593.511 2580.05
 	datum_y2 = -115.14
 	datum_z2 = -322.8000
 	#DATUM o1
@@ -129,7 +129,7 @@ class multiTable:
 #			self.c.mdi("M699") #reset
 #			self.c.wait_complete()
 			self.c.mdi(mdi_str)
-			self.c.mdi("G40G49")
+			self.c.mdi("G40G49G64")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
 			self.c.mdi("G54")
@@ -152,7 +152,7 @@ class multiTable:
 #			self.c.mdi("M699") #reset
 #			self.c.wait_complete()
 			self.c.mdi(mdi_str)
-			self.c.mdi("G40G49")
+			self.c.mdi("G40G49G64")
 			self.c.mdi("G91G28Z0.")
 			self.c.mdi("M335")
 			self.c.mdi("G54")
