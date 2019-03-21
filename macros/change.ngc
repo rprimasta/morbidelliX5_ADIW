@@ -2,7 +2,7 @@ o<change> sub
 ;=========UNTUK SIMULASI
 
 #<tp_y> = 53.437 ;59.537	abs
-#<tp_z> = -363.628 ;-353.628abs-354.244-2.
+#<tp_z> = [-363.628-1.] ;-353.628abs-354.244-2.
 
 #<tp_y_ret> = 0 	;jarak lepas y poc inc
 #<tp_z_ret> = 52.4 	;jarak lepas z poc inc
@@ -39,10 +39,10 @@ o20 if [#<selected_pocket> NE #<_current_tool>]
                 M249 (PULL MAG)
                 M334 (DHOODUP)
 
-                M66 P17 L3 Q5 (CHECK DHOOD UP POS)
+                M66 P17 L3 Q10 (CHECK DHOOD UP POS)
                 o32 if [#5399 EQ -1]
                         ;M335
-                        (abort, DHood tidak pada posisi yang benar, periksa sensor DHood up !) 
+                        (abort, DHood tidak pada posisi yang benar periksa sensor DHood up !) 
                 o32 endif
                
                 M289 P#<tool_in_spindle> (POCKET POSITIONING BY TOOL ON SPINDLE)
